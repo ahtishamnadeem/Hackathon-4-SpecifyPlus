@@ -1,0 +1,84 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "module-1/index",
+          "docs": [
+            {
+              "id": "intro",
+              "path": "/docs/intro"
+            },
+            {
+              "id": "module-1/humanoid-urdf-modeling",
+              "path": "/docs/module-1/humanoid-urdf-modeling",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "module-1/index",
+              "path": "/docs/module-1/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "module-1/intro-to-ros2",
+              "path": "/docs/module-1/intro-to-ros2",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "module-1/python-agents-ros2",
+              "path": "/docs/module-1/python-agents-ros2",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "tutorial-basics/congratulations",
+              "path": "/docs/tutorial-basics/congratulations"
+            },
+            {
+              "id": "tutorial-basics/create-a-blog-post",
+              "path": "/docs/tutorial-basics/create-a-blog-post"
+            },
+            {
+              "id": "tutorial-basics/create-a-document",
+              "path": "/docs/tutorial-basics/create-a-document"
+            },
+            {
+              "id": "tutorial-basics/create-a-page",
+              "path": "/docs/tutorial-basics/create-a-page"
+            },
+            {
+              "id": "tutorial-basics/deploy-your-site",
+              "path": "/docs/tutorial-basics/deploy-your-site"
+            },
+            {
+              "id": "tutorial-basics/markdown-features",
+              "path": "/docs/tutorial-basics/markdown-features"
+            },
+            {
+              "id": "tutorial-extras/manage-docs-versions",
+              "path": "/docs/tutorial-extras/manage-docs-versions"
+            },
+            {
+              "id": "tutorial-extras/translate-your-site",
+              "path": "/docs/tutorial-extras/translate-your-site"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/docs/module-1/",
+                "label": "module-1/index"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

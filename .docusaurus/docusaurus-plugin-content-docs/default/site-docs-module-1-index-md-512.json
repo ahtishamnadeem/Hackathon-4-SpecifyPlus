@@ -1,0 +1,33 @@
+{
+  "id": "module-1/index",
+  "title": "Module 1: The Robotic Nervous System",
+  "description": "Comprehensive overview of ROS 2 fundamentals for Physical AI and humanoid robotics",
+  "source": "@site/docs/module-1/index.md",
+  "sourceDirName": "module-1",
+  "slug": "/module-1/",
+  "permalink": "/docs/module-1/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/module-1/index.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Module 1: The Robotic Nervous System",
+    "description": "Comprehensive overview of ROS 2 fundamentals for Physical AI and humanoid robotics",
+    "sidebar_label": "Module 1 Overview",
+    "sidebar_position": 0,
+    "keywords": [
+      "ROS 2",
+      "robotics",
+      "middleware",
+      "Physical AI",
+      "humanoid"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Introduction to ROS 2",
+    "permalink": "/docs/module-1/intro-to-ros2"
+  }
+}
