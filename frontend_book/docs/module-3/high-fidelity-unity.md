@@ -779,5 +779,5 @@ The Unity Perception package makes it particularly valuable for generating synth
 
 Continue with the next chapter in this module:
 
-- [Sensor Simulation](./sensor-simulation) - Learn how to simulate various sensors for generating realistic perception data
-- [Module 3 Overview](./index) - Return to the module introduction
+- [Sensor Simulation](../module-2/sensor-simulation) - Learn how to simulate various sensors for generating realistic perception data
+- [Module 3 Overview](../module-3/) - Return to the module introduction

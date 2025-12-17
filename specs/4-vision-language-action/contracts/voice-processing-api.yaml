@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: Voice Processing API
+  description: API for processing voice commands in the Vision-Language-Action module
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+paths:
+  /process_voice:
+    post:
+      summary: Process voice command
+      description: Converts audio input to text and extracts actionable commands
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audio_file:
+                  type: string
+                  format: binary
+                  description: Audio file to process
+                confidence_threshold:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.7
+                  description: Minimum confidence for accepting transcription
+      responses:
+        '200':
+          description: Successfully processed voice command
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    description: Transcribed text from audio
+                  confidence:
+                    type: number
+                    description: Confidence score of transcription
+                  command:
+                    type: string
+                    description: Parsed command type
+                  parameters:
+                    type: object
+                    description: Command-specific parameters
+                  alternatives:
+                    type: array
+                    items:
+                      type: string
+                    description: Alternative interpretations if confidence is low
+        '400':
+          description: Invalid audio file or processing error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /plan_actions:
+    post:
+      summary: Generate action sequence from command
+      description: Uses LLM to translate high-level commands into ROS 2 action sequences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - command
+              properties:
+                command:
+                  type: string
+                  description: High-level command to plan for
+                context:
+                  type: object
+                  description: Context about robot state and environment
+                  properties:
+                    robot_state:
+                      type: object
+                      description: Current robot state
+                    environment:
+                      type: object
+                      description: Environment information
+      responses:
+        '200':
+          description: Successfully generated action sequence
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  action_sequence:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActionItem'
+                  original_command:
+                    type: string
+                    description: The original command that was processed
+        '400':
+          description: Invalid command or processing error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /execute_sequence:
+    post:
+      summary: Execute action sequence
+      description: Executes a sequence of actions on the robot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action_sequence
+              properties:
+                action_sequence:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ActionItem'
+                timeout:
+                  type: number
+                  description: Maximum time to wait for execution in seconds
+      responses:
+        '200':
+          description: Successfully executed action sequence
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Execution status
+                  execution_log:
+                    type: array
+                    items:
+                      type: object
+                    description: Log of executed actions
+                  success:
+                    type: boolean
+                    description: Whether the sequence was executed successfully
+        '400':
+          description: Invalid action sequence or execution error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+components:
+  schemas:
+    ActionItem:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          description: The action to perform (e.g., move_forward, turn_left)
+          enum:
+            - move_forward
+            - move_backward
+            - turn_left
+            - turn_right
+            - raise_arm
+            - lower_arm
+            - speak
+            - navigate_to_location
+            - detect_object
+            - grasp_object
+            - release_object
+        parameters:
+          type: object
+          description: Action-specific parameters
+        description:
+          type: string
+          description: Description of why this action is needed
+        expected_outcome:
+          type: string
+          description: What should happen after this action

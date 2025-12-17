@@ -1,0 +1,60 @@
+# CSS Conventions Contract for Docusaurus UI/UX Upgrade
+
+## Naming Convention: BEM (Block Element Modifier)
+- **Block**: Standalone entities that are meaningful on their own (e.g., .header, .card)
+- **Element**: Parts of a block that can't be used separately (e.g., .header__nav, .card__title)
+- **Modifier**: Flags on blocks or elements that change appearance or behavior (e.g., .header--sticky, .card__title--highlighted)
+
+## Color Variables
+- **Primary Colors**:
+  - --ifm-color-primary: #2563eb (slate blue)
+  - --ifm-color-primary-dark: #1d4ed8
+  - --ifm-color-primary-darker: #1e40af
+  - --ifm-color-primary-darkest: #1e3a8a
+
+- **Text Colors**:
+  - --ifm-color-content: #1e293b
+  - --ifm-color-content-secondary: #64748b
+  - --ifm-color-gray-100: #f8fafc
+  - --ifm-color-gray-200: #f1f5f9
+
+## Spacing System
+- **Base Unit**: 4px
+- **Scale**: 0, 0.25rem (1px), 0.5rem (2px), 1rem (4px), 1.5rem (6px), 2rem (8px), 3rem (12px), 4rem (16px), 6rem (24px), 8rem (32px)
+
+## Typography Scale
+- **Heading Sizes**:
+  - --ifm-h1-font-size: 2.5rem (desktop), 2rem (mobile)
+  - --ifm-h2-font-size: 2rem (desktop), 1.75rem (mobile)
+  - --ifm-h3-font-size: 1.5rem (desktop), 1.25rem (mobile)
+  - --ifm-h4-font-size: 1.25rem (desktop), 1.1rem (mobile)
+
+- **Body Text**:
+  - --ifm-font-size-base: 1rem (16px desktop), 0.9375rem (15px mobile)
+  - --ifm-line-height-base: 1.6
+  - --ifm-font-weight-base: 400
+  - --ifm-font-weight-semibold: 600
+
+## Responsive Breakpoints
+- **Small**: --ifm-breakpoint-xs: 0px
+- **Small**: --ifm-breakpoint-sm: 320px
+- **Medium**: --ifm-breakpoint-md: 768px
+- **Large**: --ifm-breakpoint-lg: 1024px
+- **X-Large**: --ifm-breakpoint-xl: 1200px
+- **XX-Large**: --ifm-breakpoint-xxl: 1440px
+
+## Component Custom Properties
+- **Navigation**:
+  - --ifm-navbar-height: 3.75rem (60px)
+  - --ifm-sidebar-width: 16rem (256px)
+  - --ifm-sidebar-width-mobile: 14rem (224px)
+
+- **Layout**:
+  - --ifm-container-width: 1140px
+  - --ifm-container-width-xl: 1320px
+  - --ifm-container-width-lg: 1024px
+
+## Accessibility Requirements
+- **Focus Indicators**: All interactive elements must have visible focus state
+- **Contrast Ratios**: Minimum 4.5:1 for normal text, 3:1 for large text
+- **Touch Targets**: Minimum 44px for interactive elements
