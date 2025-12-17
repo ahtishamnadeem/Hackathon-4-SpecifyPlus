@@ -961,4 +961,4 @@ The integration of Isaac ROS with standard ROS 2 systems provides a seamless tra
 Continue with the next chapter in this module:
 
 - [Path Planning with Nav2](./path-planning-nav2) - Learn how to adapt navigation systems for humanoid robot locomotion
-- [Module 3 Summary](./index) - Return to the module overview
+- [Module 3 Summary](../module-3/) - Return to the module overview

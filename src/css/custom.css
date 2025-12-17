@@ -1,0 +1,64 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2563eb; /* Blue for ROS/robotics theme */
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Additional custom variables for the ROS 2 book */
+  --ifm-color-secondary: #64748b; /* Gray for secondary elements */
+  --ifm-color-accent: #f59e0b; /* Amber for highlights and warnings */
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #bfdbfe;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* Dark mode custom variables */
+  --ifm-color-secondary: #94a3b8;
+  --ifm-color-accent: #fbbf24;
+}
+
+/* Custom styles for educational content */
+.admonition {
+  border-left-width: 4px;
+}
+
+.admonition--note {
+  border-left-color: var(--ifm-color-accent);
+}
+
+/* Code block styling for ROS 2 examples */
+.code-block {
+  margin-bottom: 1rem;
+}
+
+/* Styling for learning objectives */
+.learning-objectives {
+  background-color: #f8fafc;
+  border-left: 4px solid var(--ifm-color-primary);
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+[data-theme='dark'] .learning-objectives {
+  background-color: #1e293b;
+}

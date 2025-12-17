@@ -883,6 +883,6 @@ The implementation of these concepts in Nav2 requires custom plugins, modified c
 
 Continue with the module overview:
 
-- [Module 3 Overview](./index) - Return to the module introduction
-- [Physics Simulation with Isaac Sim](./physics-simulation-isaac-sim) - Review simulation concepts
+- [Module 3 Overview](../module-3/) - Return to the module introduction
+- [Photorealistic Simulation with Isaac Sim](./photorealistic-simulation-isaac-sim) - Review simulation concepts
 - [Hardware-Accelerated AI with Isaac ROS](./hardware-accelerated-ai-isaac-ros) - Review perception systems

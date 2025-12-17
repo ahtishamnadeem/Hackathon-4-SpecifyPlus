@@ -4,29 +4,173 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
+/* Modern color system with professional educational focus */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary Colors - Professional slate blue */
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+
+  /* Text Colors - Enhanced readability */
+  --ifm-color-content: #1e293b;
+  --ifm-color-content-secondary: #64748b;
+  --ifm-color-gray-100: #f8fafc;
+  --ifm-color-gray-200: #f1f5f9;
+
+  /* Background Colors */
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f8fafc;
+
+  /* Code Block Colors */
+  --ifm-color-emphasis-100: #f1f5f9;
+
+  /* Typography */
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, sans-serif;
+  --ifm-font-size-base: 1rem; /* 16px */
+  --ifm-line-height-base: 1.6;
+  --ifm-font-weight-base: 400;
+  --ifm-font-weight-semibold: 600;
+  --ifm-font-weight-bold: 700;
+
+  /* Spacing System - Base unit 4px */
+  --ifm-0: 0rem;
+  --ifm-1: 0.25rem; /* 4px */
+  --ifm-2: 0.5rem;  /* 8px */
+  --ifm-3: 0.75rem; /* 12px */
+  --ifm-4: 1rem;    /* 16px */
+  --ifm-5: 1.25rem; /* 20px */
+  --ifm-6: 1.5rem;  /* 24px */
+  --ifm-7: 1.75rem; /* 28px */
+  --ifm-8: 2rem;    /* 32px */
+  --ifm-9: 2.25rem; /* 36px */
+  --ifm-10: 2.5rem; /* 40px */
+  --ifm-12: 3rem;   /* 48px */
+  --ifm-16: 4rem;   /* 64px */
+
+  /* Typography Scale */
+  --ifm-h1-font-size: 2.5rem;
+  --ifm-h2-font-size: 2rem;
+  --ifm-h3-font-size: 1.5rem;
+  --ifm-h4-font-size: 1.25rem;
+
+  /* Responsive Typography (mobile first) */
+  --ifm-h1-font-size-mobile: 2rem;
+  --ifm-h2-font-size-mobile: 1.75rem;
+  --ifm-h3-font-size-mobile: 1.25rem;
+  --ifm-h4-font-size-mobile: 1.1rem;
+  --ifm-font-size-base-mobile: 0.9375rem; /* 15px */
+
+  /* Component Custom Properties */
+  --ifm-navbar-height: 3.75rem; /* 60px */
+  --ifm-sidebar-width: 16rem; /* 256px */
+  --ifm-sidebar-width-mobile: 14rem; /* 224px */
+
+  /* Layout */
+  --ifm-container-width: 1140px;
+  --ifm-container-width-xl: 1320px;
+  --ifm-container-width-lg: 1024px;
+
+  /* Code block styling */
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Responsive Breakpoints */
+  --ifm-breakpoint-xs: 0px;
+  --ifm-breakpoint-sm: 320px;
+  --ifm-breakpoint-md: 768px;
+  --ifm-breakpoint-lg: 1024px;
+  --ifm-breakpoint-xl: 1200px;
+  --ifm-breakpoint-xxl: 1440px;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark mode with enhanced contrast for readability */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #dbeafe;
+
+  /* Dark mode text colors */
+  --ifm-color-content: #e2e8f0;
+  --ifm-color-content-secondary: #94a3b8;
+  --ifm-background-color: #0f172a;
+  --ifm-background-surface-color: #1e293b;
+  --ifm-color-emphasis-100: #334155;
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* Typography improvements for better readability */
+/* Responsive typography scaling for headings */
+h1 {
+  font-size: var(--ifm-h1-font-size);
+  line-height: 1.2;
+  margin-bottom: var(--ifm-heading-vertical-spacing);
+  color: var(--ifm-color-content);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+h2 {
+  font-size: var(--ifm-h2-font-size);
+  line-height: 1.3;
+  margin-bottom: var(--ifm-heading-vertical-spacing);
+  color: var(--ifm-color-content);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+h3 {
+  font-size: var(--ifm-h3-font-size);
+  line-height: 1.4;
+  margin-bottom: var(--ifm-heading-vertical-spacing);
+  color: var(--ifm-color-content);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+h4 {
+  font-size: var(--ifm-h4-font-size);
+  line-height: 1.4;
+  margin-bottom: var(--ifm-heading-vertical-spacing);
+  color: var(--ifm-color-content);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Responsive typography for mobile devices */
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--ifm-h1-font-size-mobile);
+  }
+
+  h2 {
+    font-size: var(--ifm-h2-font-size-mobile);
+  }
+
+  h3 {
+    font-size: var(--ifm-h3-font-size-mobile);
+  }
+
+  h4 {
+    font-size: var(--ifm-h4-font-size-mobile);
+  }
+
+  /* Mobile body text size */
+  body {
+    font-size: var(--ifm-font-size-base-mobile);
+  }
+}
+
+/* Body text improvements */
+.markdown p {
+  font-size: var(--ifm-font-size-base);
+  line-height: var(--ifm-line-height-base);
+  color: var(--ifm-color-content);
+  margin-bottom: var(--ifm-paragraph-margin-bottom, 1rem);
 }
 
 /* Custom styles for educational content */
@@ -38,21 +182,138 @@
   border-left-color: var(--ifm-color-primary);
 }
 
-/* Code block styling for ROS 2 and Isaac examples */
+/* Enhanced code block styling for better readability */
 .code-block {
-  margin-bottom: 1rem;
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Code block container */
+.prism-code {
+  font-size: 0.9em;
+  line-height: 1.6;
+  padding: var(--ifm-paragraph-margin-bottom) var(--ifm-paragraph-margin-bottom);
+  border-radius: 8px;
+  overflow: auto;
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Syntax highlighting enhancements */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #6b7280;
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #ef4444;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #22c55e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #f59e0b;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #3b82f6;
+}
+
+.token.function,
+.token.class-name {
+  color: #ec4899;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #f97316;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+/* Inline code styling */
+:not(pre) > code {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-content);
+  font-size: 0.85em;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+/* Code block container */
+div[class*='codeBlockContainer'] {
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Line highlighting */
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Styling for learning objectives sections */
 .learning-objectives {
-  background-color: #f8fafc;
+  background-color: var(--ifm-color-gray-100);
   border-left: 4px solid var(--ifm-color-primary);
   padding: 1rem;
   margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
 }
 
 [data-theme='dark'] .learning-objectives {
-  background-color: #1e293b;
+  background-color: var(--ifm-background-surface-color);
 }
 
 /* Specific styling for Isaac/ROS educational content */
@@ -61,10 +322,671 @@
   border-left: 3px solid #3b82f6;
   padding: 0.5rem 1rem;
   margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
 }
 
 [data-theme='dark'] .isaac-topic {
   background-color: #1e3a8a;
+}
+
+/* Enhanced navbar styling with sticky functionality */
+.navbar {
+  background-color: var(--ifm-background-color);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding-top: var(--ifm-paragraph-margin-bottom);
+  padding-bottom: var(--ifm-paragraph-margin-bottom);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Fix logo size and alignment in navbar */
+.navbar__logo {
+  height: 30px;
+  width: auto;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__logo img {
+  height: 30px;
+  width: auto;
+  max-width: none;
+}
+
+.navbar__title {
+  display: flex;
+  align-items: center;
+  line-height: 30px;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.navbar__items--right {
+  align-items: center;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar--fixed-top {
+  position: sticky;
+}
+
+.navbar__inner {
+  max-width: var(--ifm-container-width);
+  margin: 0 auto;
+  padding: 0 var(--ifm-paragraph-margin-bottom);
+}
+
+.navbar__title {
+  font-weight: var(--ifm-font-weight-semibold);
+  color: var(--ifm-color-content);
+}
+
+.navbar__link {
+  color: var(--ifm-color-content-secondary);
+  font-weight: var(--ifm-font-weight-base);
+  padding: var(--ifm-button-padding-vertical) calc(var(--ifm-button-padding-horizontal) * 1.5);
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-gray-100);
+  text-decoration: none;
+}
+
+.navbar__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: var(--ifm-font-weight-semibold);
+  background-color: transparent;
+}
+
+/* Mobile navbar menu */
+.navbar-sidebar__brand {
+  padding: var(--ifm-paragraph-margin-bottom);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar-sidebar__items li a {
+  padding: var(--ifm-button-padding-vertical) var(--ifm-button-padding-horizontal);
+  border-radius: 6px;
+  margin: var(--ifm-paragraph-margin-bottom * 0.5) 0;
+}
+
+/* Enhanced sidebar styling */
+.menu {
+  padding: var(--ifm-paragraph-margin-bottom);
+}
+
+.menu__list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.menu__list-item {
+  margin-bottom: 0.25rem;
+}
+
+.menu__link {
+  padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+  border-radius: 6px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.menu__link:hover {
+  background-color: var(--ifm-color-gray-100);
+  text-decoration: none;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%);
+  color: var(--ifm-color-primary);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Enhanced sublist styling for better expandable sections */
+.menu__list-item-collapsible {
+  padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+  border-radius: 6px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease-in-out;
+  min-height: 44px;
+}
+
+.menu__list-item-collapsible:hover {
+  background-color: var(--ifm-color-gray-100);
+}
+
+.menu__list-item-collapsible .menu__link-text {
+  flex: 1;
+}
+
+.menu__list-item-collapsible .menu__caret {
+  margin-left: auto;
+  transition: transform 0.2s ease-in-out;
+}
+
+.menu__list-item-collapsible .menu__caret:before {
+  content: "▶";
+  display: inline-block;
+  transform: rotate(90deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.menu__list-item-collapsible--collapsed .menu__caret:before {
+  transform: rotate(0deg);
+}
+
+/* Nested menu styling */
+.menu .menu {
+  padding-left: var(--ifm-menu-link-padding-horizontal);
+  margin-top: 0.25rem;
+}
+
+/* Consistent button and interactive element styling */
+.button {
+  border-radius: 6px;
+  padding: var(--ifm-button-padding-vertical) var(--ifm-button-padding-horizontal);
+  font-weight: var(--ifm-font-weight-semibold);
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 8px -1px rgba(0, 0, 0, 0.1);
+}
+
+.button--primary {
+  background-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.button--primary:hover {
+  background-color: var(--ifm-color-primary-dark);
+  color: white;
+}
+
+.button--secondary {
+  background-color: transparent;
+  color: var(--ifm-color-content);
+  border: 2px solid var(--ifm-color-primary);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.button--secondary:hover {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%);
+  color: var(--ifm-color-content);
+  box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+/* Enhanced visibility for buttons in both themes */
+[data-theme='dark'] .button--secondary {
+  border: 2px solid var(--ifm-color-primary);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  color: var(--ifm-color-content);
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 95%);
+}
+
+[data-theme='dark'] .button--secondary:hover {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 85%);
+  box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.25);
+}
+
+/* Specific styling for hero banner buttons to ensure text visibility */
+.hero .button--secondary {
+  color: var(--ifm-color-content);
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+}
+
+[data-theme='dark'] .hero .button--secondary {
+  color: var(--ifm-color-content);
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%);
+}
+
+
+/* Proper focus indicators for keyboard navigation */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+summary:focus,
+[role="button"]:focus,
+[role="link"]:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+}
+
+.navbar__link:focus,
+.menu__link:focus,
+.button:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+}
+
+/* Ensure skip links are visible when focused for accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  right: 6px;
+  z-index: 9999;
+  padding: 8px;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  top: 0;
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced card and container styling for better visual organization */
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background-color: var(--ifm-background-color);
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.card__header,
+.card__footer {
+  padding: var(--ifm-paragraph-margin-bottom);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.card__header:first-child,
+.card__body:first-child,
+.card__footer:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card__header:last-child,
+.card__body:last-child,
+.card__footer:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.card__body {
+  padding: var(--ifm-paragraph-margin-bottom);
+}
+
+/* Consistent visual hierarchy for content sections */
+.main-wrapper {
+  background-color: var(--ifm-background-color);
+}
+
+.container {
+  padding-top: calc(var(--ifm-paragraph-margin-bottom) * 1.5);
+  padding-bottom: calc(var(--ifm-paragraph-margin-bottom) * 1.5);
+}
+
+.padding-top--md {
+  padding-top: calc(var(--ifm-paragraph-margin-bottom) * 1.5) !important;
+}
+
+.padding-bottom--md {
+  padding-bottom: calc(var(--ifm-paragraph-margin-bottom) * 1.5) !important;
+}
+
+.padding-horiz--md {
+  padding-left: calc(var(--ifm-paragraph-margin-bottom) * 1.5) !important;
+  padding-right: calc(var(--ifm-paragraph-margin-bottom) * 1.5) !important;
+}
+
+/* Enhanced footer styling */
+.footer {
+  background-color: var(--ifm-background-surface-color);
+  padding-top: calc(var(--ifm-paragraph-margin-bottom) * 2);
+  padding-bottom: calc(var(--ifm-paragraph-margin-bottom) * 2);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.footer__title {
+  font-weight: var(--ifm-font-weight-semibold);
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+  color: var(--ifm-color-content);
+}
+
+.footer__link-item {
+  color: var(--ifm-color-content-secondary);
+  transition: color 0.2s ease-in-out;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* Footer copyright styling to ensure visibility in both themes */
+.footer__copyright {
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.875rem;
+}
+
+/* Theme toggle button styling to ensure visibility in both themes */
+.navbar__toggle {
+  color: var(--ifm-color-content);
+  background-color: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar__toggle:hover {
+  background-color: var(--ifm-color-gray-100);
+  border-color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .navbar__toggle {
+  color: var(--ifm-color-content);
+  background-color: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme='dark'] .navbar__toggle:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Color mode switch button styling for better visibility in both themes */
+.navbar__items .clean-btn {
+  color: var(--ifm-color-content);
+}
+
+/* Theme switcher button specific styling */
+.theme-toggle {
+  color: var(--ifm-color-content);
+  background-color: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-toggle:hover {
+  background-color: var(--ifm-color-gray-100);
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+[data-theme='dark'] .theme-toggle {
+  color: var(--ifm-color-content);
+  background-color: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme='dark'] .theme-toggle:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Accessibility improvements for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Improve focus management for better screen reader experience */
+.focusable:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Ensure all images have proper alt text handling */
+img[alt=""] {
+  border: 2px dashed #ccc;
+}
+
+img[alt=""]:focus,
+img[alt=""]:hover {
+  border: 2px dashed var(--ifm-color-primary);
+}
+
+/* Semantic heading structure improvements */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Improve landmark regions for screen readers */
+[role="banner"] {
+  display: block;
+}
+
+[role="navigation"] {
+  display: block;
+}
+
+[role="main"] {
+  display: block;
+}
+
+[role="contentinfo"] {
+  display: block;
+}
+
+/* Improve landmark regions for screen readers */
+main {
+  display: block;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Better contrast for all interactive elements */
+a,
+button,
+input,
+select,
+textarea {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* High contrast mode support for visually impaired users */
+@media (prefers-contrast: high) {
+  :root {
+    --ifm-color-primary: #0000ff; /* High contrast blue */
+    --ifm-color-primary-dark: #0000cc;
+    --ifm-color-primary-darker: #000099;
+    --ifm-color-primary-darkest: #000066;
+    --ifm-color-content: #000000;
+    --ifm-color-content-secondary: #000000;
+    --ifm-background-color: #ffffff;
+    --ifm-background-surface-color: #ffffff;
+    --ifm-color-emphasis-100: #000000;
+  }
+
+  [data-theme='dark'] {
+    --ifm-color-primary: #0066ff; /* Bright blue for dark mode */
+    --ifm-color-primary-dark: #0044cc;
+    --ifm-color-primary-darker: #002299;
+    --ifm-color-primary-darkest: #000066;
+    --ifm-color-content: #ffffff;
+    --ifm-color-content-secondary: #ffffff;
+    --ifm-background-color: #000000;
+    --ifm-background-surface-color: #000000;
+    --ifm-color-emphasis-100: #ffffff;
+  }
+
+  /* Enhance borders and outlines for high contrast */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  .card,
+  .navbar,
+  .menu,
+  .footer {
+    border: 2px solid currentColor !important;
+  }
+
+  /* Increase focus indicator visibility */
+  a:focus,
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus,
+  summary:focus,
+  [role="button"]:focus,
+  [role="link"]:focus,
+  [tabindex]:focus {
+    outline: 4px solid currentColor !important;
+    outline-offset: 2px;
+    box-shadow: none !important;
+  }
+
+  /* Ensure sufficient contrast for text */
+  h1, h2, h3, h4, h5, h6,
+  p,
+  span,
+  div,
+  li {
+    color: var(--ifm-color-content) !important;
+    background-color: var(--ifm-background-color) !important;
+  }
+
+  /* High contrast for code blocks */
+  .prism-code {
+    background-color: var(--ifm-background-color) !important;
+    color: var(--ifm-color-content) !important;
+    border: 2px solid currentColor !important;
+  }
+
+  /* High contrast for buttons */
+  .button--primary {
+    background-color: var(--ifm-color-primary) !important;
+    color: var(--ifm-background-color) !important;
+  }
+
+  .button--secondary {
+    background-color: var(--ifm-background-color) !important;
+    color: var(--ifm-color-primary) !important;
+    border: 2px solid var(--ifm-color-primary) !important;
+  }
+}
+
+/* Support for Windows high contrast mode */
+@media screen and (-ms-high-contrast: active) {
+  :root {
+    --ifm-color-primary: windowText;
+    --ifm-color-content: windowText;
+    --ifm-background-color: window;
+    --ifm-color-emphasis-100: highlight;
+  }
+
+  /* Ensure all elements respect system colors in Windows high contrast mode */
+  * {
+    background-color: var(--ifm-background-color) !important;
+    color: var(--ifm-color-content) !important;
+  }
+
+  a, button, input, select, textarea {
+    border: 1px solid var(--ifm-color-content) !important;
+  }
+
+  .navbar, .menu, .footer, .card {
+    border: 1px solid var(--ifm-color-content) !important;
+  }
+}
+
+/* Performance optimizations */
+/* Optimize rendering for better performance */
+* {
+  box-sizing: border-box;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  /* Enable lazy loading for images */
+  loading: lazy;
+}
+
+/* Optimize font loading */
+@font-face {
+  font-display: swap;
+}
+
+/* Optimize animations for performance */
+*,
+*::before,
+*::after {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optimize scrolling performance */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Robot model visualization containers */
@@ -81,4 +1003,92 @@
 
 [data-theme='dark'] .robot-model-container {
   background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
+}
+
+/* Optimize code block rendering */
+.prism-code {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga" 1;
+}
+
+/* Core Web Vitals optimizations */
+/* Optimize Largest Contentful Paint (LCP) */
+main img[loading="lazy"] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto;
+}
+
+/* Prevent layout shift for images */
+img, picture, video {
+  max-width: 100%;
+  height: auto;
+  position: relative;
+}
+
+/* Reserve space for images to prevent layout shift */
+img:not([width]):not([height]),
+picture > img,
+video {
+  aspect-ratio: auto;
+}
+
+/* Optimize font loading for better FID */
+@font-face {
+  font-display: swap;
+}
+
+/* Optimize buttons and interactive elements for FID */
+button,
+input,
+select,
+textarea,
+a {
+  font-size: 16px; /* For better touch targets and input responsiveness */
+}
+
+/* Optimize for Cumulative Layout Shift (CLS) */
+* {
+  box-sizing: border-box;
+}
+
+/* Reserve space for elements that might shift */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6,
+.markdown p,
+.markdown ul,
+.markdown ol {
+  min-height: 1em; /* Prevent layout shift when content loads */
+}
+
+/* Optimize for CLS with stable containers */
+.container {
+  min-height: 300px; /* Reserve space for content */
+}
+
+/* Ensure ads and embeds don't cause layout shift */
+iframe {
+  width: 100%;
+  min-height: 300px;
+}
+
+/* Optimize for CLS with fixed aspect ratios for media */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
