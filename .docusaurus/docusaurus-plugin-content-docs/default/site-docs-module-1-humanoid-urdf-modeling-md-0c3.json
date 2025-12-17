@@ -1,0 +1,40 @@
+{
+  "id": "module-1/humanoid-urdf-modeling",
+  "title": "Humanoid Robot Modeling with URDF",
+  "description": "Learn how to model humanoid robots using URDF for simulation and control",
+  "source": "@site/docs/module-1/humanoid-urdf-modeling.md",
+  "sourceDirName": "module-1",
+  "slug": "/module-1/humanoid-urdf-modeling",
+  "permalink": "/docs/module-1/humanoid-urdf-modeling",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/module-1/humanoid-urdf-modeling.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Humanoid Robot Modeling with URDF",
+    "description": "Learn how to model humanoid robots using URDF for simulation and control",
+    "sidebar_label": "Humanoid Robot Modeling with URDF",
+    "sidebar_position": 3,
+    "keywords": [
+      "URDF",
+      "humanoid robots",
+      "links",
+      "joints",
+      "sensors",
+      "coordinate frames"
+    ],
+    "learning_outcomes": [
+      "Understand the purpose of URDF in humanoid robots",
+      "Create URDF models with proper links, joints, and coordinate frames",
+      "Include sensors in URDF models for humanoid robots",
+      "Prepare humanoid robots for simulation and control"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Python Agents and ROS 2",
+    "permalink": "/docs/module-1/python-agents-ros2"
+  }
+}

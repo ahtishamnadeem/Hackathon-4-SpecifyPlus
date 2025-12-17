@@ -1,0 +1,45 @@
+{
+  "id": "module-1/python-agents-ros2",
+  "title": "Python Agents and ROS 2 Control",
+  "description": "Learn how to bridge Python AI agents to robot controllers using ROS 2",
+  "source": "@site/docs/module-1/python-agents-ros2.md",
+  "sourceDirName": "module-1",
+  "slug": "/module-1/python-agents-ros2",
+  "permalink": "/docs/module-1/python-agents-ros2",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/module-1/python-agents-ros2.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Python Agents and ROS 2 Control",
+    "description": "Learn how to bridge Python AI agents to robot controllers using ROS 2",
+    "sidebar_label": "Python Agents and ROS 2",
+    "sidebar_position": 2,
+    "keywords": [
+      "ROS 2",
+      "Python",
+      "rclpy",
+      "agents",
+      "controllers",
+      "publishers",
+      "subscribers"
+    ],
+    "learning_outcomes": [
+      "Use rclpy to build ROS 2 nodes that interface with Python AI agents",
+      "Implement the bridge between Python AI agents and robot controllers",
+      "Create publishers, subscribers, services, and actions in ROS 2",
+      "Understand practical applications of Python agents in robotics"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction to ROS 2",
+    "permalink": "/docs/module-1/intro-to-ros2"
+  },
+  "next": {
+    "title": "Humanoid Robot Modeling with URDF",
+    "permalink": "/docs/module-1/humanoid-urdf-modeling"
+  }
+}
