@@ -74,3 +74,6 @@ The content is organized as follows:
 ## Contributing
 
 For more information, see the [Docusaurus documentation](https://docusaurus.io/).
+
+## Alot efforts
+## Developed by | CodeWithAhtii
