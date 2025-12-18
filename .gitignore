@@ -1,11 +1,28 @@
 # Dependencies
 node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.ENV/
+.venv/
+.env
 
 # Build outputs
 build/
 dist/
 .out/
 .output/
+*.egg
+*.egg-info/
+.eggs/
+eggs/
+.installed.cfg
+develop-eggs/
 
 # Docusaurus-specific
 .cache/
