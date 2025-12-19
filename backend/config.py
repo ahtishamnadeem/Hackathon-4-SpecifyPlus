@@ -34,22 +34,34 @@ def load_config() -> dict:
         raise ConfigurationError("QDRANT_API_KEY environment variable is required")
     config['qdrant_api_key'] = qdrant_api_key
 
-    # OpenAI configuration
+    # Cohere configuration for embeddings
+    cohere_api_key = os.getenv('COHERE_API_KEY')
+    if not cohere_api_key:
+        raise ConfigurationError("COHERE_API_KEY environment variable is required")
+    config['cohere_api_key'] = cohere_api_key
+
+    # Google AI Studio configuration (for alternative LLM if needed)
+    google_ai_studio_api_key = os.getenv('GOOGLE_AI_STUDIO_API_KEY')
+    if google_ai_studio_api_key:
+        config['google_ai_studio_api_key'] = google_ai_studio_api_key
+
+    # OpenAI configuration (optional - can use Google AI Studio instead)
     openai_api_key = os.getenv('OPENAI_API_KEY')
     if not openai_api_key:
-        raise ConfigurationError("OPENAI_API_KEY environment variable is required")
-    config['openai_api_key'] = openai_api_key
+        logger.warning("OPENAI_API_KEY not set, will check for alternative LLM providers")
+    else:
+        config['openai_api_key'] = openai_api_key
 
     # Agent configuration (with defaults)
     config['model_name'] = os.getenv('MODEL_NAME', 'gpt-4-turbo')
-    config['collection_name'] = os.getenv('COLLECTION_NAME', 'rag_embedding')
+    config['collection_name'] = os.getenv('COLLECTION_NAME', 'book_content')
     config['max_retrievals'] = int(os.getenv('MAX_RETRIEVALS', '5'))
     config['temperature'] = float(os.getenv('TEMPERATURE', '0.7'))
     config['max_tokens'] = int(os.getenv('MAX_TOKENS', '500'))
 
     # Server configuration (with defaults)
-    config['host'] = os.getenv('HOST', '0.0.0.0')
-    config['port'] = int(os.getenv('PORT', '8000'))
+    config['host'] = os.getenv('BACKEND_HOST', '0.0.0.0')
+    config['port'] = int(os.getenv('BACKEND_PORT', '8000'))
 
     logger.info("Configuration loaded successfully")
     return config

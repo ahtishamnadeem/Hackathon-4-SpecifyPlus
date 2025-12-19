@@ -1,7 +1,7 @@
 # Research: RAG Spec-4 Frontend-Backend Integration
 
 ## Overview
-Research for implementing a frontend-backend integration service that connects Docusaurus frontend chat component with FastAPI backend for RAG agent communication. The system will include reusable chat UI component, text selection capture, client-side query logic, CORS configuration, response handling, and comprehensive testing.
+Research for implementing a Docusaurus frontend chat component that integrates with a FastAPI backend for RAG agent communication. The system will provide a reusable chat UI, text selection capture, API communication, and response handling with proper loading/error states.
 
 ## Technology Decisions
 
@@ -30,8 +30,8 @@ Research for implementing a frontend-backend integration service that connects D
 - Express.js: Would require switching to Node.js ecosystem
 
 ### CORS Configuration
-**Decision**: Use FastAPI's built-in middleware with slowapi for rate limiting
-**Rationale**: FastAPI provides robust CORS support with fine-grained control. Slowapi provides effective rate limiting for API endpoints.
+**Decision**: Use FastAPI's built-in middleware with proper origin validation
+**Rationale**: FastAPI provides robust CORS support with fine-grained control. Can specify exact origins, methods, and headers.
 **Alternatives considered**:
 - Manual headers: More error-prone and less configurable
 - Third-party CORS libraries: Unnecessary when FastAPI provides built-in support
@@ -60,7 +60,7 @@ Research for implementing a frontend-backend integration service that connects D
 **Decision**: RESTful API endpoints with proper request/response validation
 **Rationale**: Provides a clean interface for external systems to interact with the RAG agent.
 **Endpoints**:
-- POST /chat/query: Process user queries and selected text context
+- POST /chat/send: Process user queries and selected text context
 - GET /chat/health: Health check for the integration
 - POST /chat/text-selection: Handle text selection data from frontend
 

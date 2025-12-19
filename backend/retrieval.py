@@ -66,14 +66,17 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
         # Initialize Qdrant client
         qdrant_client = initialize_qdrant_client()
 
-        # For now, we'll use a placeholder embedding approach
-        # In a real implementation, we'd use the appropriate embedding service
-        # Since the requirement is for OpenAI Agents SDK, we'll need to implement properly
+        # Initialize Cohere client for embeddings
+        import cohere
+        co = cohere.Client(config['cohere_api_key'])
 
-        # For demonstration, we'll create a mock embedding
-        # In a real implementation, this would call the appropriate embedding API
-        import random
-        query_embedding = [random.random() for _ in range(1536)]  # Typical embedding dimension
+        # Generate embedding for the query using Cohere
+        response = co.embed(
+            texts=[query_text],
+            model='embed-english-v3.0',  # Using Cohere's latest embedding model
+            input_type='search_query'
+        )
+        query_embedding = response.embeddings[0]
 
         # Perform semantic search in Qdrant
         search_results = qdrant_client.search(

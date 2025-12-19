@@ -41,7 +41,7 @@ AI engineers need to create a reusable chat UI component within the Docusaurus f
 
 ---
 
-### User Story 2 - Text Selection and Query Submission (Priority: P2)
+### User Story 2 - Text Selection Capture and Query Submission (Priority: P2)
 
 AI engineers need to implement text selection capture from book pages and client-side logic to send user queries and selected text to the FastAPI backend. This enables users to interact with specific content in the book.
 
@@ -119,10 +119,10 @@ AI engineers need to handle API responses and display agent answers in the chat 
 
 ### Key Entities *(include if feature involves data)*
 
-- **Chat Message**: A message in the conversation containing query text, response, and metadata
+- **User Query**: A question or request submitted by the user with optional selected text context
 - **Text Selection**: A portion of text selected by the user with position metadata and page context
-- **API Request**: A structured request containing query, selected text, and context information
-- **API Response**: A structured response containing the agent's answer, sources, and confidence metrics
+- **Agent Response**: The generated answer from the RAG agent based on the query and selected text
+- **Source Reference**: Metadata indicating which book content was used to generate the response
 
 ## Success Criteria *(mandatory)*
 

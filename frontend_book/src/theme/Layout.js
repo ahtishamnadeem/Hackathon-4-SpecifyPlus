@@ -1,11 +1,13 @@
 import React from 'react';
 import OriginalLayout from '@theme-original/Layout';
 import {useLocation} from '@docusaurus/router';
+import FloatingChatbot from '../components/FloatingChatbot';
 
+// No wrapper needed here — FloatingChatbot can use hooks safely
 export default function Layout(props) {
   const {pathname} = useLocation();
 
-  // Create a unique ID for the main content based on the pathname
+  // Unique ID for main content (skip link)
   const mainContentId = `main-content-${pathname.replace(/\//g, '-') || 'home'}`;
 
   return (
@@ -19,6 +21,9 @@ export default function Layout(props) {
         <main id={mainContentId}>
           {props.children}
         </main>
+
+        {/* Floating Chatbot inside OriginalLayout to ensure ColorModeProvider */}
+        <FloatingChatbot />
       </OriginalLayout>
     </>
   );

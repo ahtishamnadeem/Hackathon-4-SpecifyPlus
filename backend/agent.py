@@ -17,22 +17,43 @@ from retrieval import retrieve_content
 logger = logging.getLogger(__name__)
 
 
-def initialize_openai_client() -> openai.OpenAI:
+def initialize_llm_client():
     """
-    Initialize OpenAI client with connection validation
+    Initialize LLM client with connection validation (OpenAI or Google AI Studio)
     """
     config = load_config()
 
-    try:
-        client = openai.OpenAI(api_key=config['openai_api_key'])
+    # Try OpenAI first
+    if 'openai_api_key' in config and config['openai_api_key']:
+        try:
+            import openai
+            client = openai.OpenAI(api_key=config['openai_api_key'])
 
-        # Test connection by making a simple API call
-        client.models.list()
-        logger.info("Successfully connected to OpenAI API")
-        return client
-    except Exception as e:
-        logger.error(f"Failed to connect to OpenAI: {str(e)}")
-        raise ConnectionError(f"Could not connect to OpenAI: {str(e)}")
+            # Test connection by making a simple API call
+            client.models.list()
+            logger.info("Successfully connected to OpenAI API")
+            return client, 'openai'
+        except Exception as e:
+            logger.warning(f"Failed to connect to OpenAI: {str(e)}, trying Google AI Studio")
+
+    # Try Google AI Studio as fallback
+    if 'google_ai_studio_api_key' in config and config['google_ai_studio_api_key']:
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=config['google_ai_studio_api_key'])
+
+            # Get the generative model
+            model_name = config.get('model_name', 'gemini-pro')
+            model = genai.GenerativeModel(model_name)
+
+            logger.info("Successfully connected to Google AI Studio")
+            return model, 'google'
+        except Exception as e:
+            logger.error(f"Failed to connect to Google AI Studio: {str(e)}")
+            raise ConnectionError(f"Could not connect to any LLM provider: OpenAI and Google AI Studio failed")
+
+    # If neither worked
+    raise ConnectionError("No valid LLM provider configured. Please set either OPENAI_API_KEY or GOOGLE_AI_STUDIO_API_KEY")
 
 
 def process_query(query_text: str, max_tokens: Optional[int] = None, temperature: Optional[float] = None) -> Dict[str, Any]:
@@ -83,8 +104,8 @@ def process_query(query_text: str, max_tokens: Optional[int] = None, temperature
         # Combine the context
         context = "\n\n".join(context_texts)
 
-        # Step 3: Generate response using OpenAI
-        openai_client = initialize_openai_client()
+        # Step 3: Generate response using available LLM
+        llm_client, provider = initialize_llm_client()
 
         # Format the prompt with context
         prompt = f"""
@@ -100,18 +121,54 @@ def process_query(query_text: str, max_tokens: Optional[int] = None, temperature
         Answer:
         """
 
-        response = openai_client.chat.completions.create(
-            model=config['model_name'],
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that answers questions based on provided context. Only use information from the context to answer. If the context doesn't contain the information needed, say so."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=max_tokens,
-            temperature=temperature
-        )
+        if provider == 'openai':
+            # Use OpenAI
+            import openai
+            response = llm_client.chat.completions.create(
+                model=config['model_name'],
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that answers questions based on provided context. Only use information from the context to answer. If the context doesn't contain the information needed, say so."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=max_tokens,
+                temperature=temperature
+            )
 
-        generated_answer = response.choices[0].message.content
-        usage = response.usage
+            generated_answer = response.choices[0].message.content
+            usage = response.usage
+
+            # Extract token usage
+            input_tokens = usage.prompt_tokens if usage else 0
+            output_tokens = usage.completion_tokens if usage else 0
+            total_tokens = usage.total_tokens if usage else (input_tokens + output_tokens)
+        else:
+            # Use Google AI Studio
+            import google.generativeai as genai
+
+            # Prepare the full prompt
+            full_prompt = f"""You are a helpful assistant that answers questions based on provided context. Only use information from the context to answer. If the context doesn't contain the information needed, say so.
+
+Context:
+{context}
+
+Question: {query_text}
+
+Answer:"""
+
+            # Generate content using Google AI Studio
+            response = llm_client.generate_content(
+                full_prompt,
+                generation_config={
+                    'max_output_tokens': max_tokens,
+                    'temperature': temperature
+                }
+            )
+
+            generated_answer = response.text
+            # Google AI Studio doesn't provide detailed token usage in the same way
+            input_tokens = 0  # Not readily available
+            output_tokens = 0  # Not readily available
+            total_tokens = 0   # Not readily available
 
         # Step 4: Calculate confidence score based on similarity scores
         confidence_score = 0.0
@@ -130,14 +187,15 @@ def process_query(query_text: str, max_tokens: Optional[int] = None, temperature
             'retrieval_details': retrieval_result,
             'generation_details': {
                 'model_used': config['model_name'],
-                'tokens_used': usage.total_tokens if usage else 0,
-                'input_tokens': usage.prompt_tokens if usage else 0,
-                'output_tokens': usage.completion_tokens if usage else 0
+                'provider_used': provider,
+                'tokens_used': total_tokens,
+                'input_tokens': input_tokens,
+                'output_tokens': output_tokens
             },
             'processing_time_ms': execution_time
         }
 
-        logger.info(f"Processed query: '{query_text[:50]}...' in {execution_time:.2f}ms with confidence {confidence_score:.2f}")
+        logger.info(f"Processed query: '{query_text[:50]}...' in {execution_time:.2f}ms with confidence {confidence_score:.2f} using {provider}")
         return result
 
     except Exception as e:

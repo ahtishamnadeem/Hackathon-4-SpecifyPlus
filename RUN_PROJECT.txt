@@ -1,0 +1,51 @@
+# Project Setup and Run Instructions
+
+## Prerequisites
+- Python 3.8+ installed
+- Node.js and npm installed
+
+## Step-by-Step Instructions
+
+### 1. Start the Backend Server
+Open a terminal/command prompt and navigate to your project directory, then:
+
+```
+cd backend
+python -m uvicorn integration_api:app --host 0.0.0.0 --port 8000
+```
+
+### 2. Build and Serve the Frontend
+In a new terminal/command prompt (while keeping the backend running), navigate to your project directory and run:
+
+```
+npx docusaurus build
+npx serve -s build -l 3002
+```
+
+### 3. Access the Application
+Open your web browser and navigate to:
+- Frontend: http://localhost:3002
+- Backend Health Check: http://localhost:8000/chat/health
+
+### 4. Using the Floating Chat Widget
+1. Visit http://localhost:3002 in your browser
+2. Look for the chat icon at the bottom-right corner of any page
+3. Click the icon to open the floating chat widget
+4. Type your questions and interact with the RAG agent
+5. You can select text from the documentation to provide context
+6. Click the X button or the chat icon again to close the widget
+
+## Alternative Method (Development Mode)
+If you prefer running in development mode:
+1. After building, instead of npx serve, you can use:
+```
+npx docusaurus serve --port 3002
+```
+
+## Troubleshooting
+- If port 8000 or 3002 is already in use, you may need to kill existing processes or use different ports
+- Make sure both servers are running simultaneously for full functionality
+- The backend server handles all API requests for the chat widget
+- The frontend serves the Docusaurus documentation with the floating chat widget
+
+The floating chat widget will be available on every page of the documentation site, providing seamless access to the RAG agent without leaving your current page.

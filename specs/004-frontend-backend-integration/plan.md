@@ -14,8 +14,8 @@ Integration service connecting Docusaurus frontend chat component with FastAPI b
 **Language/Version**: JavaScript/TypeScript (frontend), Python 3.11 (backend)
 **Primary Dependencies**:
 - Frontend: `react`, `axios`, `docusaurus`, `@docusaurus/core`, `@docusaurus/preset-classic`
-- Backend: `fastapi`, `uvicorn`, `python-dotenv`, `pydantic`, `slowapi` (for rate limiting)
-**Storage**: Communication with existing RAG backend services (Qdrant Cloud, OpenAI)
+- Backend: `fastapi`, `uvicorn`, `python-dotenv`, `pydantic`, `qdrant-client`, `cohere`, `slowapi` (for rate limiting)
+**Storage**: Communication with existing RAG backend services (Qdrant Cloud, Cohere)
 **Testing**: Jest for frontend, pytest for backend
 **Target Platform**: Web browser (frontend), Linux server (backend)
 **Project Type**: frontend-backend integration service

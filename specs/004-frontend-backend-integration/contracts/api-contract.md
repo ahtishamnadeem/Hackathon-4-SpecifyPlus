@@ -3,7 +3,7 @@
 ## Overview
 API contract for the endpoints that facilitate communication between the Docusaurus frontend chat component and the FastAPI backend for RAG agent integration.
 
-## Endpoint: POST /chat/query
+## Endpoint: POST /chat/send
 **Description**: Process user queries with optional selected text context and return generated answers based on retrieved content
 
 ### Request
@@ -16,9 +16,12 @@ API contract for the endpoints that facilitate communication between the Docusau
   - `page_url` (string): URL of the page where text was selected
   - `page_title` (string): Title of the page where text was selected
   - `module` (string): Module or section where text was selected
+  - `position_start` (integer): Starting character position of selection
+  - `position_end` (integer): Ending character position of selection
 - `user_preferences` (object, optional): User preferences for the response:
-  - `temperature` (float): Temperature setting for response generation (0.0 to 1.0, default: 0.7)
-  - `max_tokens` (integer): Maximum tokens for the response (default: 500)
+  - `max_tokens` (integer): Maximum tokens for the response (default: 500, min: 1, max: 2000)
+  - `temperature` (float): Temperature for response generation (default: 0.7, min: 0.0, max: 1.0)
+  - `include_sources` (boolean): Whether to include source references (default: true)
 
 **Example Request**:
 ```json
@@ -28,11 +31,14 @@ API contract for the endpoints that facilitate communication between the Docusau
   "context_metadata": {
     "page_url": "https://book.example.com/ros2-intro",
     "page_title": "Introduction to ROS 2",
-    "module": "Chapter 1"
+    "module": "Chapter 1",
+    "position_start": 100,
+    "position_end": 180
   },
   "user_preferences": {
-    "temperature": 0.7,
-    "max_tokens": 300
+    "max_tokens": 300,
+    "temperature": 0.5,
+    "include_sources": true
   }
 }
 ```
@@ -54,7 +60,7 @@ API contract for the endpoints that facilitate communication between the Docusau
   "confidence": 0.85,
   "retrieval_stats": {
     "chunks_retrieved": 3,
-    "execution_time_ms": 450
+    "processing_time_ms": 450
   },
   "query_id": "query-12345"
 }
@@ -81,55 +87,6 @@ API contract for the endpoints that facilitate communication between the Docusau
     "type": "ServiceUnavailable",
     "message": "Unable to connect to RAG agent services",
     "code": "AGENT_UNAVAILABLE"
-  },
-  "timestamp": "2025-12-19T10:30:00Z"
-}
-```
-
-## Endpoint: POST /chat/text-selection
-**Description**: Handle text selection data from frontend for context capture
-
-### Request
-**Content-Type**: `application/json`
-
-**Body Parameters**:
-- `selected_text` (string, required): The selected text content
-- `page_url` (string, required): URL of the page where text was selected
-- `page_title` (string, required): Title of the page where text was selected
-- `position_start` (integer, required): Starting character position of selection
-- `position_end` (integer, required): Ending character position of selection
-- `timestamp` (string, required): ISO 8601 timestamp of selection
-
-**Example Request**:
-```json
-{
-  "selected_text": "This is the selected text from the book",
-  "page_url": "https://book.example.com/chapter-2",
-  "page_title": "Advanced Concepts",
-  "position_start": 150,
-  "position_end": 190,
-  "timestamp": "2025-12-19T10:30:00Z"
-}
-```
-
-### Response
-**Success Response (200 OK)**:
-```json
-{
-  "success": true,
-  "selection_id": "sel-67890",
-  "message": "Text selection captured successfully"
-}
-```
-
-**Error Response (400 Bad Request)**:
-```json
-{
-  "success": false,
-  "error": {
-    "type": "ValidationError",
-    "message": "Selected text and page URL are required",
-    "code": "MISSING_SELECTION_DATA"
   },
   "timestamp": "2025-12-19T10:30:00Z"
 }
@@ -170,6 +127,57 @@ API contract for the endpoints that facilitate communication between the Docusau
 }
 ```
 
+## Endpoint: POST /chat/text-selection
+**Description**: Handle text selection data from frontend for context capture
+
+### Request
+**Content-Type**: `application/json`
+
+**Body Parameters**:
+- `selected_text` (string, required): The selected text content
+- `page_url` (string, required): URL of the page where text was selected
+- `page_title` (string, required): Title of the page where text was selected
+- `module` (string, required): Module or section where text was selected
+- `position_start` (integer, required): Starting character position of selection
+- `position_end` (integer, required): Ending character position of selection
+- `timestamp` (string, required): ISO 8601 timestamp of selection
+
+**Example Request**:
+```json
+{
+  "selected_text": "This is the selected text from the book",
+  "page_url": "https://book.example.com/chapter-2",
+  "page_title": "Advanced Concepts",
+  "module": "Module 2",
+  "position_start": 150,
+  "position_end": 190,
+  "timestamp": "2025-12-19T10:30:00Z"
+}
+```
+
+### Response
+**Success Response (200 OK)**:
+```json
+{
+  "success": true,
+  "selection_id": "sel-67890",
+  "message": "Text selection captured successfully"
+}
+```
+
+**Error Response (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "error": {
+    "type": "ValidationError",
+    "message": "Selected text and page URL are required",
+    "code": "MISSING_SELECTION_DATA"
+  },
+  "timestamp": "2025-12-19T10:30:00Z"
+}
+```
+
 ## Error Codes
 
 - `MISSING_QUERY`: Query text is missing or invalid
@@ -180,7 +188,7 @@ API contract for the endpoints that facilitate communication between the Docusau
 - `RATE_LIMIT_EXCEEDED`: Request rate limit exceeded
 
 ## Rate Limiting
-- **Per IP**: 10 requests per minute
+- **Per IP**: 10 requests per minute for /chat/send
 - **Per API key**: 100 requests per minute
 - **Burst limit**: 5 requests allowed in 1 second window
 
@@ -188,3 +196,9 @@ API contract for the endpoints that facilitate communication between the Docusau
 - **Method**: Optional API Key in header (if required)
 - **Header**: `X-API-Key: your-api-key-here` (optional)
 - **Required**: No by default, configurable per deployment
+
+## CORS Configuration
+- **Allowed Origins**: Configurable via environment variable (defaults to development origins)
+- **Allowed Methods**: GET, POST, OPTIONS
+- **Allowed Headers**: Content-Type, X-API-Key, X-Requested-With
+- **Credentials**: Allow credentials if configured per deployment

@@ -9,6 +9,7 @@ import os
 import sys
 import logging
 import asyncio
+import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
@@ -139,20 +140,33 @@ async def health_check():
 async def send_chat_message(request: ChatQueryRequest):
     """Process a user query and return a generated answer based on retrieved content"""
     try:
-        # This is a placeholder implementation
-        # In a real implementation, this would call the RAG agent
-
         # Log the incoming request
         logger.info(f"Received chat query: '{request.query[:50]}...' with selected text: {bool(request.selected_text)}")
 
-        # Placeholder response - in real implementation, this would call the RAG agent
+        # Import the agent module to process the query
+        from agent import process_query
+
+        # Prepare the query context
+        query_text = request.query
+        if request.selected_text:
+            # If selected text is provided, use it as context
+            query_text = f"Based on the following context: {request.selected_text}\n\nQuestion: {request.query}"
+
+        # Process the query with the RAG agent
+        result = process_query(
+            query_text=query_text,
+            max_tokens=request.user_preferences.get('max_tokens', 500),
+            temperature=request.user_preferences.get('temperature', 0.7)
+        )
+
+        # Prepare the response
         response_data = {
             "success": True,
-            "message": "This is a placeholder response. The full integration with the RAG agent would be implemented in a complete system.",
-            "sources": [],
-            "confidence": 0.85,
-            "processing_time_ms": 1200.0,
-            "conversation_id": "conv-placeholder-12345"
+            "message": result['answer'],
+            "sources": result['sources'],
+            "confidence": result['confidence_score'],
+            "processing_time_ms": result['processing_time_ms'],
+            "conversation_id": f"conv-{uuid.uuid4()}"
         }
 
         logger.info(f"Returning chat response for query: '{request.query[:50]}...'")
