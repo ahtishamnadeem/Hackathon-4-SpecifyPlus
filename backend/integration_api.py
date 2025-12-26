@@ -146,17 +146,14 @@ async def send_chat_message(request: ChatQueryRequest):
         # Import the agent module to process the query
         from agent import process_query
 
-        # Prepare the query context
-        query_text = request.query
-        if request.selected_text:
-            # If selected text is provided, use it as context
-            query_text = f"Based on the following context: {request.selected_text}\n\nQuestion: {request.query}"
-
-        # Process the query with the RAG agent
+        # Process the query with the RAG agent, passing selected text separately
         result = process_query(
-            query_text=query_text,
+            query_text=request.query,
+            selected_text=request.selected_text,
             max_tokens=request.user_preferences.get('max_tokens', 500),
-            temperature=request.user_preferences.get('temperature', 0.7)
+            temperature=request.user_preferences.get('temperature', 0.7),
+            user_id=request.context_metadata.get('user_id') if request.context_metadata else None,
+            session_id=request.context_metadata.get('session_id') if request.context_metadata else None
         )
 
         # Prepare the response
@@ -166,7 +163,7 @@ async def send_chat_message(request: ChatQueryRequest):
             "sources": result['sources'],
             "confidence": result['confidence_score'],
             "processing_time_ms": result['processing_time_ms'],
-            "conversation_id": f"conv-{uuid.uuid4()}"
+            "conversation_id": result.get('session_id', f"conv-{uuid.uuid4()}")
         }
 
         logger.info(f"Returning chat response for query: '{request.query[:50]}...'")

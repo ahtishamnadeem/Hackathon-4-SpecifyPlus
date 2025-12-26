@@ -64,9 +64,12 @@ from retrieval import validate_qdrant_connection
 # -------------------------
 class QueryRequest(BaseModel):
     query: str
+    selected_text: Optional[str] = None
+    context_metadata: Optional[Dict[str, Any]] = None
     max_tokens: Optional[int] = 500
     temperature: Optional[float] = 0.7
     include_sources: Optional[bool] = True
+    user_preferences: Optional[Dict[str, Any]] = None
 
 class QueryResponse(BaseModel):
     query: str
@@ -147,6 +150,7 @@ async def chat_send(request: Request, query_request: QueryRequest = Body(...)):
             None,
             lambda: process_query(
                 query_text=query_request.query,
+                selected_text=query_request.selected_text,
                 max_tokens=query_request.max_tokens,
                 temperature=query_request.temperature
             )
@@ -161,8 +165,17 @@ async def chat_send(request: Request, query_request: QueryRequest = Body(...)):
         }
 
     except Exception as e:
-        logger.error(f"Error in /chat/send: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        error_msg = str(e)
+        logger.error(f"Error in /chat/send: {error_msg}")
+
+        # Check if this is a configuration error that can be more specifically described
+        if "QDRANT_URL" in error_msg or "configuration" in error_msg.lower():
+            raise HTTPException(
+                status_code=500,
+                detail="Configuration error: Required environment variables are missing. Please check that QDRANT_URL and other required configuration variables are set."
+            )
+        else:
+            raise HTTPException(status_code=500, detail=error_msg)
 
 # -------------------------
 # Server Start

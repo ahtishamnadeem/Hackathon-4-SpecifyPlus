@@ -23,7 +23,11 @@ def initialize_qdrant_client() -> QdrantClient:
     """
     Initialize Qdrant client with connection validation
     """
-    config = load_config()
+    try:
+        config = load_config()
+    except Exception as e:
+        logger.error(f"Failed to load configuration for Qdrant: {str(e)}")
+        raise ConnectionError(f"Could not load configuration: {str(e)}")
 
     try:
         client = QdrantClient(
@@ -55,12 +59,17 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
     """
     start_time = time.time()
 
-    # Get configuration
-    config = load_config()
-    if collection_name is None:
-        collection_name = config['collection_name']
-    if top_k is None:
-        top_k = config['max_retrievals']
+    try:
+        # Get configuration
+        config = load_config()
+        if collection_name is None:
+            collection_name = config['collection_name']
+        if top_k is None:
+            top_k = config['max_retrievals']
+    except Exception as e:
+        logger.error(f"Failed to load configuration for content retrieval: {str(e)}")
+        execution_time = (time.time() - start_time) * 1000
+        raise ConnectionError(f"Could not load configuration: {str(e)}")
 
     try:
         # Initialize Qdrant client
@@ -78,29 +87,32 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
         )
         query_embedding = response.embeddings[0]
 
-        # Perform semantic search in Qdrant
-        search_results = qdrant_client.search(
+        # Perform semantic search in Qdrant using query_points method (newer API)
+        from qdrant_client.http import models
+        search_results = qdrant_client.query_points(
             collection_name=collection_name,
-            query_vector=query_embedding,
+            query=query_embedding,
             limit=top_k,
             with_payload=True,
             with_vectors=False
         )
 
-        # Format results
+        # Format results - query_points returns PointStruct or similar objects
         retrieved_chunks = []
-        for point in search_results:
+        for point in search_results.points:
+            # Extract payload safely
+            payload = point.payload if point.payload else {}
             chunk = {
-                'text': point.payload.get('text', ''),
-                'similarity_score': point.score,
+                'text': payload.get('text', ''),
+                'similarity_score': point.score if hasattr(point, 'score') else 0.0,
                 'metadata': {
-                    'module': point.payload.get('module', ''),
-                    'page': point.payload.get('page', ''),
-                    'heading': point.payload.get('heading', ''),
-                    'url': point.payload.get('url', ''),
-                    'title': point.payload.get('title', '')
+                    'module': payload.get('module', ''),
+                    'page': payload.get('page', ''),
+                    'heading': payload.get('heading', ''),
+                    'url': payload.get('url', ''),
+                    'title': payload.get('title', '')
                 },
-                'vector_id': point.id
+                'vector_id': point.id if hasattr(point, 'id') else None
             }
             retrieved_chunks.append(chunk)
 
@@ -135,9 +147,19 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
     Returns:
         Dictionary containing connection status and collection info
     """
-    config = load_config()
-    if collection_name is None:
-        collection_name = config['collection_name']
+    try:
+        config = load_config()
+        if collection_name is None:
+            collection_name = config['collection_name']
+    except Exception as e:
+        logger.error(f"Failed to load configuration for Qdrant validation: {str(e)}")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'error': f"Configuration error: {str(e)}"
+        }
 
     try:
         client = initialize_qdrant_client()
@@ -171,7 +193,13 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Failed to validate Qdrant connection: {str(e)}")
-        raise ConnectionError(f"Could not validate Qdrant connection: {str(e)}")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'error': f"Connection error: {str(e)}"
+        }
 
 
 if __name__ == "__main__":

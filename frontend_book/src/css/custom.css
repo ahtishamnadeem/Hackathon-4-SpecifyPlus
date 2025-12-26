@@ -85,6 +85,11 @@
   --ifm-breakpoint-lg: 1024px;
   --ifm-breakpoint-xl: 1200px;
   --ifm-breakpoint-xxl: 1440px;
+
+  /* Modern shadows and elevation */
+  --ifm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ifm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --ifm-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Dark mode with enhanced contrast for readability */
@@ -176,10 +181,563 @@ h4 {
 /* Custom styles for educational content */
 .admonition {
   border-left-width: 4px;
+  border-radius: 8px;
+  box-shadow: var(--ifm-shadow-md);
+  overflow: hidden;
 }
 
 .admonition--note {
   border-left-color: var(--ifm-color-primary);
+}
+
+/* Modern card styling for content sections */
+.card {
+  border-radius: 12px;
+  box-shadow: var(--ifm-shadow-md);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ifm-shadow-lg);
+}
+
+/* Enhanced button styling with modern design */
+.button {
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: var(--ifm-font-weight-semibold);
+  transition: all 0.2s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.button:hover::before {
+  opacity: 1;
+}
+
+.button--primary {
+  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-darker));
+  box-shadow: var(--ifm-shadow-md);
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ifm-shadow-lg);
+}
+
+.button--secondary {
+  background: transparent;
+  border: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  box-shadow: var(--ifm-shadow-md);
+}
+
+.button--secondary:hover {
+  background: color-mix(in srgb, var(--ifm-color-primary), transparent 90%);
+  transform: translateY(-2px);
+  box-shadow: var(--ifm-shadow-lg);
+}
+
+/* Dark mode button enhancements */
+[data-theme='dark'] .button--secondary {
+  border: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary), transparent 95%);
+}
+
+[data-theme='dark'] .button--secondary:hover {
+  background: color-mix(in srgb, var(--ifm-color-primary), transparent 85%);
+}
+
+
+/* Enhanced sidebar styling */
+.menu__list-item {
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+}
+
+.menu__link {
+  border-radius: 8px;
+  margin: 2px 0;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 85%);
+  box-shadow: inset 2px 0 0 var(--ifm-color-primary);
+}
+
+/* Modern code block styling */
+.prism-code {
+  border-radius: 12px;
+  box-shadow: var(--ifm-shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.prism-code::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ifm-color-emphasis-100), transparent 70%), transparent);
+  z-index: 2;
+}
+
+/* Modern robotics-inspired footer styling */
+.footer {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--ifm-background-surface-color) 95%, var(--ifm-color-primary) 5%),
+    color-mix(in srgb, var(--ifm-background-surface-color) 85%, var(--ifm-color-primary) 15%));
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add subtle background pattern for tech feel */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--ifm-color-primary), transparent 95%) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--ifm-color-primary), transparent 95%) 0.5px, transparent 0.5px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.footer__container {
+  position: relative;
+  z-index: 1;
+}
+
+.footer__title {
+  font-weight: var(--ifm-font-weight-bold);
+  margin-bottom: 1.25rem;
+  color: var(--ifm-color-content);
+  font-size: 1.1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.footer__title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+
+.footer__title:hover::after {
+  width: 50px;
+}
+
+
+/* Style for the list items containing links */
+.footer__item {
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+/* Style for the actual links inside footer */
+.footer__link {
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.3s ease;
+  position: relative;
+  display: block;
+  text-decoration: none;
+  padding: 0.25rem 0;
+}
+
+.footer__link:hover {
+  color: var(--ifm-color-primary);
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+/* Improve visibility in light mode */
+html[data-theme='light'] .footer__link {
+  color: color-mix(in srgb, var(--ifm-color-content), transparent 30%);
+}
+
+html[data-theme='light'] .footer__link:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Subtle underline effect on hover */
+.footer__link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+
+.footer__link:hover::before {
+  width: 100%;
+}
+
+/* Make sure links inside lists are properly stacked vertically */
+.footer__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__items li {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.footer__items li:last-child {
+  margin-bottom: 0;
+}
+
+/* Layout for each column */
+.footer__col {
+  margin-bottom: 2rem;
+}
+
+.footer__col:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer copyright styling with modern look */
+.footer__copyright {
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  text-align: center;
+}
+
+/* Footer links container styling */
+.footer__links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+}
+
+/* Footer logo/title section */
+.footer__brand {
+  margin-bottom: 1.5rem;
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.footer__logo img {
+  height: 32px;
+  width: 32px;
+  margin-right: 0.75rem;
+}
+
+.footer__description {
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Hover glow effect for links */
+.footer__link {
+  position: relative;
+}
+
+.footer__link::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.footer__link:hover::after {
+  opacity: 0.1;
+  background: var(--ifm-color-primary);
+}
+
+/* Dark theme specific enhancements */
+html[data-theme='dark'] .footer {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--ifm-background-surface-color) 90%, var(--ifm-color-primary) 10%),
+    color-mix(in srgb, var(--ifm-background-surface-color) 75%, var(--ifm-color-primary) 15%));
+  border-top: 1px solid var(--ifm-color-emphasis-400);
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] .footer__copyright {
+  border-top: 1px solid var(--ifm-color-emphasis-400);
+}
+
+/* Animation for footer entrance */
+.footer {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: footerFadeIn 1s ease-out forwards;
+}
+
+@keyframes footerFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer__links {
+    gap: 1.5rem;
+  }
+
+  .footer__title {
+    font-size: 1rem;
+  }
+
+  .footer__description {
+    font-size: 0.9rem;
+  }
+
+  .footer__copyright {
+    font-size: 0.8rem;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer__title::after {
+    display: none;
+  }
+
+  .footer__title {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced focus styles for accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+summary:focus,
+[role="button"]:focus,
+[role="link"]:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+}
+
+/* Modern table styling */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: var(--ifm-shadow-md);
+  overflow: hidden;
+}
+
+.table-wrapper table {
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.table-wrapper th {
+  background-color: var(--ifm-color-emphasis-100);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Enhanced image styling - excluding navbar logo */
+img {
+  border-radius: 8px;
+  box-shadow: var(--ifm-shadow-md);
+  transition: all 0.3s ease;
+}
+
+img:hover {
+  box-shadow: var(--ifm-shadow-lg);
+  transform: scale(1.02);
+}
+
+/* Exclude navbar logo from general image styles - more specific selector */
+.navbar__brand .navbar__logo img,
+.navbar__item .navbar__logo img {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: none !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.navbar__brand .navbar__logo img:hover,
+.navbar__item .navbar__logo img:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Modern search bar styling */
+.navbar__search-input {
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: all 0.2s ease;
+}
+
+.navbar__search-input:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+}
+
+/* Enhanced link styling */
+.markdown a {
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+  transition: all 0.2s ease;
+}
+
+.markdown a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--ifm-color-primary);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  z-index: -1;
+}
+
+.markdown a:hover {
+  color: var(--ifm-color-primary);
+}
+
+.markdown a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Modern blockquote styling */
+blockquote {
+  border-left: 4px solid var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary), transparent 95%);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--ifm-shadow-md);
+}
+
+blockquote::before {
+  content: '"';
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  font-size: 3rem;
+  color: color-mix(in srgb, var(--ifm-color-primary), transparent 70%);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+/* Enhanced list styling */
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+ul li, ol li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+ul li::marker {
+  color: var(--ifm-color-primary);
+}
+
+/* Modern input styling */
+input, textarea, select {
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 80%);
+  outline: none;
 }
 
 /* Enhanced code block styling for better readability */
@@ -331,8 +889,8 @@ div[class*='codeBlockContainer'] {
 
 /* Enhanced navbar styling with sticky functionality */
 .navbar {
-  background-color: var(--ifm-background-color);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  background: color-mix(in srgb, var(--ifm-background-color), transparent 20%);
+  box-shadow: var(--ifm-shadow-md);
   padding-top: var(--ifm-paragraph-margin-bottom);
   padding-bottom: var(--ifm-paragraph-margin-bottom);
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
@@ -340,22 +898,46 @@ div[class*='codeBlockContainer'] {
   top: 0;
   z-index: 1000;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 /* Fix logo size and alignment in navbar */
 .navbar__logo {
-  height: 30px;
-  width: auto;
-  margin-right: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 32px !important;
+  width: 32px !important;
+  margin-right: 0.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  flex-shrink: 0 !important;
 }
 
 .navbar__logo img {
-  height: 30px;
-  width: auto;
-  max-width: none;
+  height: 32px !important;
+  width: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  object-fit: contain !important;
+  background-color: transparent !important;
+  display: block !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure logo visibility in both themes */
+html[data-theme='light'] .navbar__logo img,
+html[data-theme='dark'] .navbar__logo img {
+  background-color: transparent !important;
+  padding: 0 !important;
 }
 
 .navbar__title {
@@ -687,35 +1269,6 @@ summary:focus,
   padding-right: calc(var(--ifm-paragraph-margin-bottom) * 1.5) !important;
 }
 
-/* Enhanced footer styling */
-.footer {
-  background-color: var(--ifm-background-surface-color);
-  padding-top: calc(var(--ifm-paragraph-margin-bottom) * 2);
-  padding-bottom: calc(var(--ifm-paragraph-margin-bottom) * 2);
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.footer__title {
-  font-weight: var(--ifm-font-weight-semibold);
-  margin-bottom: var(--ifm-paragraph-margin-bottom);
-  color: var(--ifm-color-content);
-}
-
-.footer__link-item {
-  color: var(--ifm-color-content-secondary);
-  transition: color 0.2s ease-in-out;
-}
-
-.footer__link-item:hover {
-  color: var(--ifm-color-primary);
-  text-decoration: none;
-}
-
-/* Footer copyright styling to ensure visibility in both themes */
-.footer__copyright {
-  color: var(--ifm-color-content-secondary);
-  font-size: 0.875rem;
-}
 
 /* Theme toggle button styling to ensure visibility in both themes */
 .navbar__toggle {

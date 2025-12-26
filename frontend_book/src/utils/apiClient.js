@@ -42,11 +42,32 @@ class ApiClient {
   // Send chat query
   async sendQuery(queryData) {
     try {
-      const response = await this.client.post('/chat/send', queryData);
-      return response.data;
+      // Prepare the payload with the new structure expected by the backend
+      const payload = {
+        query: queryData.query || queryData.message, // Handle both field names
+        selected_text: queryData.selected_text || queryData.selectedText || null,
+        context_metadata: queryData.context_metadata || queryData.contextMetadata || {},
+        max_tokens: queryData.user_preferences?.max_tokens || 500,
+        temperature: queryData.user_preferences?.temperature || 0.7,
+        include_sources: true
+      };
+
+      const response = await this.client.post('/chat/send', payload);
+      return {
+        success: true,
+        message: response.data.reply,
+        sources: response.data.sources,
+        confidence: response.data.confidence,
+        session_id: response.data.session_id
+      };
     } catch (error) {
       console.error('Error sending query:', error);
-      return { success: false, error: { message: error.message } };
+      return {
+        success: false,
+        error: {
+          message: error.response?.data?.detail || error.message || 'Failed to send query'
+        }
+      };
     }
   }
 

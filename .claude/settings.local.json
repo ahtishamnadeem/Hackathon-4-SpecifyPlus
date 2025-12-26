@@ -14,7 +14,10 @@
       "Bash(git checkout HEAD -- frontend_book/package.json)",
       "Bash(git restore frontend_book/)",
       "Bash(copy \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\" \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\")",
-      "Bash(cmd /c \"copy \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\"\" \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\"\"\")"
+      "Bash(cmd /c \"copy \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\"\" \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\"\"\")",
+      "Bash(dir staticimghero-banner-img.png)",
+      "Bash(dir staticimg /b)",
+      "Bash(cmd /c \"dir static\\\\img\")"
     ]
   }
 }

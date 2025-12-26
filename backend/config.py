@@ -8,6 +8,10 @@ Ensures all required configuration values are present and valid before startup.
 import os
 import logging
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -45,16 +49,24 @@ def load_config() -> dict:
     if google_ai_studio_api_key:
         config['google_ai_studio_api_key'] = google_ai_studio_api_key
 
-    # OpenAI configuration (optional - can use Google AI Studio instead)
+    # OpenAI configuration (required for this implementation)
     openai_api_key = os.getenv('OPENAI_API_KEY')
-    if not openai_api_key:
-        logger.warning("OPENAI_API_KEY not set, will check for alternative LLM providers")
+    if not openai_api_key or openai_api_key == 'sk-your-openai-api-key-here':
+        raise ConfigurationError("OPENAI_API_KEY environment variable is required")
+    config['openai_api_key'] = openai_api_key
+
+    # Neon Postgres configuration (for session and memory persistence)
+    neon_database_url = os.getenv('NEON_DATABASE_URL')
+    if neon_database_url and neon_database_url != 'postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/dbname?sslmode=require':
+        config['neon_database_url'] = neon_database_url
     else:
-        config['openai_api_key'] = openai_api_key
+        # Use SQLite for development/testing
+        config['neon_database_url'] = 'sqlite:///./rag_agent.db'
+        logger.warning("NEON_DATABASE_URL not set or is default, using SQLite for development")
 
     # Agent configuration (with defaults)
     config['model_name'] = os.getenv('MODEL_NAME', 'gpt-4-turbo')
-    config['collection_name'] = os.getenv('COLLECTION_NAME', 'book_content')
+    config['collection_name'] = os.getenv('COLLECTION_NAME', 'rag_embedding')
     config['max_retrievals'] = int(os.getenv('MAX_RETRIEVALS', '5'))
     config['temperature'] = float(os.getenv('TEMPERATURE', '0.7'))
     config['max_tokens'] = int(os.getenv('MAX_TOKENS', '500'))

@@ -4,15 +4,90 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dark mode background overlay */
+.heroBackgroundOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+html[data-theme='dark'] .heroBackgroundOverlay {
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 2rem;
+    padding: 3rem 1rem;
+    min-height: 80vh;
+  }
+}
+
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+html[data-theme='dark'] .heroContent {
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Text animations */
+.fadeInUp {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fadeInUpDelay1 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+.fadeInUpDelay2 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -20,4 +95,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 576px) {
+  .buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+
+/* Chat page styling */
+.chatContainer {
+  padding: 4rem 1rem;
+  min-height: calc(100vh - var(--ifm-navbar-height));
+}
+
+.chatContent {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.chatWrapper {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 996px) {
+  .chatContainer {
+    padding: 2rem 1rem;
+  }
+
+  .chatWrapper {
+    justify-content: center;
+  }
 }

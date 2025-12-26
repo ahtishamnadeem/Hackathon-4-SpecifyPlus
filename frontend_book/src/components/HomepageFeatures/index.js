@@ -1,49 +1,59 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import useOnScreen from '@site/src/utils/useOnScreen';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Physical AI',
+    imageUrl: '/img/card1.png',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Foundation of embodied intelligence. Master AI systems that
+        perceive, interact, and learn from the physical world.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Humanoid Robotics',
+    imageUrl: '/img/card2.png',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Advanced locomotion & interaction. Build robots that move,
+        think, and collaborate like humans.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'ROS 2 Ecosystem',
+    imageUrl: '/img/card3.png',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Distributed robotics framework. Navigate, communicate, and
+        orchestrate complex robotic systems.
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({imageUrl, title, description}) {
+  const [ref, isOnScreen] = useOnScreen({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
   return (
-    <div className={clsx('col col--4')}>
+    <div
+      ref={ref}
+      className={clsx(
+        'col col--4',
+        styles.featureCard,
+        isOnScreen ? styles.featureCardVisible : ''
+      )}
+    >
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <img src={imageUrl} alt={title} className={styles.featureImage} />
       </div>
       <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
+        <Heading as="h3" className={styles.featureTitle}>{title}</Heading>
+        <p className={styles.featureDescription}>{description}</p>
       </div>
     </div>
   );

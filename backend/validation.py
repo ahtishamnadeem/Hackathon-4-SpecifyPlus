@@ -164,10 +164,15 @@ def initialize_cohere_client():
         raise QdrantConnectionError(f"Could not connect to Cohere: {str(e)}")
 
 
-def validate_qdrant_connection(qdrant_url: str = None, qdrant_api_key: str = None, collection_name: str = "rag_embedding") -> Dict[str, Any]:
+def validate_qdrant_connection(qdrant_url: str = None, qdrant_api_key: str = None, collection_name: str = None) -> Dict[str, Any]:
     """
     Validates connection to Qdrant Cloud and verifies access to the specified collection
     """
+    if collection_name is None:
+        from config import load_config
+        config = load_config()
+        collection_name = config.get('collection_name', 'rag_embedding')
+
     if not qdrant_url:
         qdrant_url = os.getenv('QDRANT_URL')
     if not qdrant_api_key:
@@ -224,10 +229,15 @@ def validate_qdrant_connection(qdrant_url: str = None, qdrant_api_key: str = Non
             raise QdrantConnectionError(f"Could not validate Qdrant connection: {str(e)}")
 
 
-def execute_semantic_query(query_text: str, collection_name: str = "rag_embedding", top_k: int = 5, query_filters: Dict = None) -> Dict[str, Any]:
+def execute_semantic_query(query_text: str, collection_name: str = None, top_k: int = 5, query_filters: Dict = None) -> Dict[str, Any]:
     """
     Executes a semantic similarity search against the Qdrant collection
     """
+    if collection_name is None:
+        from config import load_config
+        config = load_config()
+        collection_name = config.get('collection_name', 'rag_embedding')
+
     # Initialize Cohere client to generate query embedding
     cohere_client = initialize_cohere_client()
 
@@ -244,32 +254,36 @@ def execute_semantic_query(query_text: str, collection_name: str = "rag_embeddin
 
         query_embedding = response.embeddings[0]  # Get the first (and only) embedding
 
-        # Execute similarity search in Qdrant
+        # Execute similarity search in Qdrant using query_points method (newer API)
         start_time = time.time()
 
-        search_result = qdrant_client.search(
+        from qdrant_client.http import models
+        search_result = qdrant_client.query_points(
             collection_name=collection_name,
-            query_vector=query_embedding,
+            query=query_embedding,
             limit=top_k,
-            with_payload=True
+            with_payload=True,
+            with_vectors=False
         )
 
         execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 
-        # Format results
+        # Format results - query_points returns PointStruct or similar objects
         retrieved_chunks = []
-        for point in search_result:
+        for point in search_result.points:
+            # Extract payload safely
+            payload = point.payload if point.payload else {}
             chunk = {
-                'text': point.payload.get('text', ''),
-                'similarity_score': point.score,
+                'text': payload.get('text', ''),
+                'similarity_score': point.score if hasattr(point, 'score') else 0.0,
                 'metadata': {
-                    'module': point.payload.get('module', ''),
-                    'page': point.payload.get('page', ''),
-                    'heading': point.payload.get('heading', ''),
-                    'url': point.payload.get('url', ''),
-                    'title': point.payload.get('title', '')
+                    'module': payload.get('module', ''),
+                    'page': payload.get('page', ''),
+                    'heading': payload.get('heading', ''),
+                    'url': payload.get('url', ''),
+                    'title': payload.get('title', '')
                 },
-                'vector_id': point.id
+                'vector_id': point.id if hasattr(point, 'id') else None
             }
             retrieved_chunks.append(chunk)
 
@@ -431,13 +445,19 @@ def main(
     qdrant_url: str = None,
     qdrant_api_key: str = None,
     cohere_api_key: str = None,
-    collection_name: str = "rag_embedding",
+    collection_name: str = None,
     test_queries: List[str] = None,
     top_k: int = VALIDATION_TOP_K
 ):
     """
     Main validation function that orchestrates the complete pipeline validation
     """
+    # Use config value if collection_name is not provided
+    if collection_name is None:
+        from config import load_config
+        config = load_config()
+        collection_name = config.get('collection_name', 'rag_embedding')
+
     logger.info("Starting RAG Retrieval Pipeline Validation")
 
     try:
@@ -549,8 +569,8 @@ if __name__ == "__main__":
                        help='Qdrant API key (defaults to QDRANT_API_KEY env var)')
     parser.add_argument('--cohere-api-key', default=os.getenv('COHERE_API_KEY'),
                        help='Cohere API key (defaults to COHERE_API_KEY env var)')
-    parser.add_argument('--collection-name', default='rag_embedding',
-                       help='Collection name to validate (default: rag_embedding)')
+    parser.add_argument('--collection-name', default=None,
+                       help='Collection name to validate (defaults to COLLECTION_NAME env var or rag_embedding)')
     parser.add_argument('--top-k', type=int, default=VALIDATION_TOP_K,
                        help=f'Number of results to retrieve (default: {VALIDATION_TOP_K})')
     parser.add_argument('--query', action='append', dest='queries',
@@ -562,11 +582,18 @@ if __name__ == "__main__":
     test_queries = args.queries if args.queries else None
 
     try:
+        # Use config value if collection_name is not provided via command line
+        collection_name = args.collection_name
+        if collection_name is None:
+            from config import load_config
+            config = load_config()
+            collection_name = config.get('collection_name', 'rag_embedding')
+
         result = main(
             qdrant_url=args.qdrant_url,
             qdrant_api_key=args.qdrant_api_key,
             cohere_api_key=args.cohere_api_key,
-            collection_name=args.collection_name,
+            collection_name=collection_name,
             test_queries=test_queries,
             top_k=args.top_k  # Pass the top_k parameter
         )
