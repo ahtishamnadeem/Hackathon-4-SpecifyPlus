@@ -356,6 +356,6 @@ For support, please:
   <b>Developed By ❤️ | CodeWithAhtii</b>
 </p>
 
-<p align="center">
-  <i>"Innovation distinguishes between a leader and a follower. Keep building, keep learning, and keep pushing the boundaries of what's possible in AI and robotics."</i>
-</p>
+For more information, see the [Docusaurus documentation](https://docusaurus.io/).
+
+## Alot efforts
