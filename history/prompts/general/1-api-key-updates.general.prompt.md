@@ -22,14 +22,14 @@ tests_yaml: []
 # API Key Updates for OpenAI and Google AI Studio
 
 ## PROMPT_TEXT
-here is my openai API key "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" update it and also here is my google ai studio API key "AIzaSyCD4vDeQClrxgM5CI9gXrzWmAcOb9R80FQ" update it also
+here is my openai API key "sk-...REDACTED..." update it and also here is my google ai studio API key "AIza...REDACTED..." update it also
 
 ## RESPONSE_TEXT
 I have successfully updated both API keys in the .env file:
 
-✅ **OpenAI API Key**: Updated to the new key: `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`
+✅ **OpenAI API Key**: Updated to the new key: `sk-...REDACTED...`
 
-✅ **Google AI Studio API Key**: Updated to the new key: `AIzaSyCD4vDeQClrxgM5CI9gXrzWmAcOb9R80FQ`
+✅ **Google AI Studio API Key**: Updated to the new key: `AIza...REDACTED...`
 
 The system now has the latest API keys configured. The dual-API fallback mechanism that was previously implemented will continue to work with these new keys, automatically falling back from OpenAI to Google AI Studio when encountering quota limits.
 

@@ -24,7 +24,7 @@ tests_yaml: []
 # Google AI Studio Model Name Update
 
 ## PROMPT_TEXT
-here is my openai API key "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" and use "Model name: gemini-1.5-flash"
+here is my openai API key "sk-...REDACTED..." and use "Model name: gemini-1.5-flash"
 
 ## RESPONSE_TEXT
 I have successfully integrated the new Google AI Studio API key and updated the model name to "gemini-1.5-flash" as requested.

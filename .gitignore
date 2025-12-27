@@ -90,3 +90,6 @@ debug.log
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Prompt history records (may contain sensitive data)
+history/prompts/
