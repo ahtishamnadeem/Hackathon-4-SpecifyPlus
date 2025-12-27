@@ -1,4 +1,9 @@
-# Module 4: Vision-Language-Action
+---
+sidebar_label: 'Module 4 Overview'
+sidebar_position: 1
+---
+
+# Module 4: AI Integration and Capstone Project
 
 This module focuses on the convergence of language models, perception, and robotic action for autonomous humanoid behavior. Students will learn to integrate LLMs, voice commands, and autonomous planning in humanoid robots.
 

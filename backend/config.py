@@ -8,6 +8,10 @@ Ensures all required configuration values are present and valid before startup.
 import os
 import logging
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -25,20 +29,45 @@ def load_config() -> dict:
 
     # Qdrant configuration
     qdrant_url = os.getenv('QDRANT_URL')
-    if not qdrant_url:
-        raise ConfigurationError("QDRANT_URL environment variable is required")
-    config['qdrant_url'] = qdrant_url
-
     qdrant_api_key = os.getenv('QDRANT_API_KEY')
-    if not qdrant_api_key:
-        raise ConfigurationError("QDRANT_API_KEY environment variable is required")
-    config['qdrant_api_key'] = qdrant_api_key
 
-    # OpenAI configuration
+    # Check if Qdrant is configured (both URL and API key are provided)
+    if qdrant_url and qdrant_api_key and qdrant_url.strip() != '' and qdrant_api_key.strip() != '':
+        config['qdrant_url'] = qdrant_url.strip()
+        config['qdrant_api_key'] = qdrant_api_key.strip()
+        config['qdrant_enabled'] = True
+        logger.info("Qdrant configuration loaded successfully")
+    else:
+        config['qdrant_enabled'] = False
+        config['qdrant_url'] = None
+        config['qdrant_api_key'] = None
+        logger.warning("Qdrant not configured - RAG functionality will be disabled. The system will operate in general knowledge mode only.")
+
+    # Cohere configuration for embeddings
+    cohere_api_key = os.getenv('COHERE_API_KEY')
+    if not cohere_api_key:
+        raise ConfigurationError("COHERE_API_KEY environment variable is required")
+    config['cohere_api_key'] = cohere_api_key
+
+    # Google AI Studio configuration (for alternative LLM if needed)
+    google_ai_studio_api_key = os.getenv('GOOGLE_AI_STUDIO_API_KEY')
+    if google_ai_studio_api_key:
+        config['google_ai_studio_api_key'] = google_ai_studio_api_key
+
+    # OpenAI configuration (required for this implementation)
     openai_api_key = os.getenv('OPENAI_API_KEY')
-    if not openai_api_key:
+    if not openai_api_key or openai_api_key == 'sk-your-openai-api-key-here':
         raise ConfigurationError("OPENAI_API_KEY environment variable is required")
     config['openai_api_key'] = openai_api_key
+
+    # Neon Postgres configuration (for session and memory persistence)
+    neon_database_url = os.getenv('NEON_DATABASE_URL')
+    if neon_database_url and neon_database_url != 'postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/dbname?sslmode=require':
+        config['neon_database_url'] = neon_database_url
+    else:
+        # Use SQLite for development/testing
+        config['neon_database_url'] = 'sqlite:///./rag_agent.db'
+        logger.warning("NEON_DATABASE_URL not set or is default, using SQLite for development")
 
     # Agent configuration (with defaults)
     config['model_name'] = os.getenv('MODEL_NAME', 'gpt-4-turbo')
@@ -48,8 +77,8 @@ def load_config() -> dict:
     config['max_tokens'] = int(os.getenv('MAX_TOKENS', '500'))
 
     # Server configuration (with defaults)
-    config['host'] = os.getenv('HOST', '0.0.0.0')
-    config['port'] = int(os.getenv('PORT', '8000'))
+    config['host'] = os.getenv('BACKEND_HOST', '0.0.0.0')
+    config['port'] = int(os.getenv('BACKEND_PORT', '8000'))
 
     logger.info("Configuration loaded successfully")
     return config

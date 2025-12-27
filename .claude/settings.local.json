@@ -2,7 +2,32 @@
   "permissions": {
     "allow": [
       "Bash(python -m pytest tests/ -v)",
-      "Bash(python -c \"import sys; sys.path.insert\\(0, ''backend''\\); import retrieval; print\\(''retrieval.py imports successfully''\\)\")"
+      "Bash(python -c \"import sys; sys.path.insert\\(0, ''backend''\\); import retrieval; print\\(''retrieval.py imports successfully''\\)\")",
+      "Bash(cmd /c \"netstat -ano | findstr :3000\")",
+      "Bash(npx docusaurus start --port 3001)",
+      "Bash(cmd /c \"del C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\src\\\\pages\\\\chat.js\")",
+      "Bash(npx docusaurus build)",
+      "Bash(mkdir -p frontend_book/src/components/HomepageFeatures)",
+      "Bash(mkdir -p frontend_book/src/pages)",
+      "Bash(mkdir -p frontend_book/src/theme)",
+      "Bash(mkdir -p frontend_book/src/css)",
+      "Bash(git checkout HEAD -- frontend_book/package.json)",
+      "Bash(git restore frontend_book/)",
+      "Bash(copy \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\" \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\")",
+      "Bash(cmd /c \"copy \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\"\" \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\"\"\")",
+      "Bash(dir staticimghero-banner-img.png)",
+      "Bash(dir staticimg /b)",
+      "Bash(cmd /c \"dir static\\\\img\")",
+      "Bash(dir /s)",
+      "Bash(findstr \"\\\\.env\")",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\frontend_book\" /s)",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\frontend_book\\\\docs\" /s)",
+      "Bash(dir backend*.env* /s)",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\" /s)",
+      "Bash(findstr -i env)",
+      "Bash(cmd /c \"dir \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\"\" /s | findstr -i env\")",
+      "Bash(python -c \"from config import load_config; config = load_config\\(\\); print\\(''Qdrant enabled:'', config.get\\(''qdrant_enabled'', False\\)\\); print\\(''Qdrant URL length:'', len\\(config.get\\(''qdrant_url'', ''''\\)\\) if config.get\\(''qdrant_url''\\) else 0\\)\")",
+      "Bash(python -c \"from retrieval import validate_qdrant_connection; result = validate_qdrant_connection\\(\\); print\\(''Connected:'', result[''connected'']\\); print\\(''Qdrant enabled:'', result[''qdrant_enabled'']\\); print\\(''Error:'', result.get\\(''error'', ''None''\\)\\)\")"
     ]
   }
 }

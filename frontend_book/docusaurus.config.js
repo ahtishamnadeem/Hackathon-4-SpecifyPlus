@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'ROS 2 Fundamentals for Physical AI and Humanoid Robotics',
+  title: 'Physical AI and Humanoid Robotics',
   tagline: 'Learn ROS 2 as the robotic nervous system for humanoid control, communication, and embodiment',
   favicon: 'img/favicon.ico',
 
@@ -88,16 +88,16 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       colorMode: {
-        defaultMode: 'light',
+        defaultMode: 'dark',
         disableSwitch: false,
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false, // Changed to false so it always defaults to dark regardless of system preference
       },
       metadata: [
         {name: 'keywords', content: 'ROS 2, robotics, AI, physical AI, humanoid robotics, navigation, Isaac Sim, Isaac ROS, robot operating system, autonomous robots, machine learning, computer vision'},
-        {name: 'author', content: 'ROS 2 Fundamentals Book'},
+        {name: 'author', content: 'Physical AI and Humanoid Robotics Book'},
         {name: 'description', content: 'Learn ROS 2 as the robotic nervous system for humanoid control, communication, and embodiment. Comprehensive guide to robotics, AI, and physical AI applications.'},
         {name: 'og:type', content: 'website'},
-        {name: 'og:site_name', content: 'ROS 2 Fundamentals for Physical AI and Humanoid Robotics'},
+        {name: 'og:site_name', content: 'Physical AI and Humanoid Robotics'},
         {name: 'og:description', content: 'Learn ROS 2 as the robotic nervous system for humanoid control, communication, and embodiment. Comprehensive guide to robotics, AI, and physical AI applications.'},
         {name: 'og:image', content: 'img/docusaurus-social-card.jpg'},
         {name: 'og:image:alt', content: 'ROS 2 Fundamentals Book Cover'},
@@ -109,13 +109,15 @@ const config = {
         {name: 'twitter:image:alt', content: 'ROS 2 Fundamentals Book Cover'},
         {name: 'theme-color', content: '#2563eb'},
         {name: 'msapplication-TileColor', content: '#2563eb'},
-        {name: 'application-name', content: 'ROS 2 Fundamentals'},
+        {name: 'application-name', content: 'Physical AI and Humanoid Robotics'},
       ],
       navbar: {
-        title: 'ROS 2 Fundamentals',
+        title: 'Physical AI and Humanoid Robotics',
         logo: {
-          alt: 'ROS 2 Logo',
-          src: 'img/logo.svg',
+          alt: 'Robot Logo',
+          src: 'img/robot.png',
+          width: 32,
+          height: 32,
         },
         style: 'primary',
         items: [
@@ -204,7 +206,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by | CodeWithAhtii`,
+        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by ❤️ | CodeWithAhtii`,
       },
       prism: {
         theme: prismThemes.github,

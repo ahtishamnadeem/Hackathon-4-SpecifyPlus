@@ -1,0 +1,435 @@
+.translationContainer {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.translationHeader {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.translationToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-height: 40px;
+  box-shadow: var(--ifm-shadow-md);
+}
+
+.translationToggle:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--ifm-shadow-lg);
+}
+
+.translationToggle:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.translationToggle.englishActive {
+  background: linear-gradient(135deg, var(--ifm-color-primary-lightest), var(--ifm-color-primary-lighter));
+  color: var(--ifm-color-primary-darkest);
+}
+
+.translationToggle.urduActive {
+  background: linear-gradient(135deg, #fef3c7, #fcd34d);
+  color: #92400e;
+}
+
+.translationToggle.translating {
+  opacity: 0.8;
+}
+
+.translationToggle.darkMode.englishActive {
+  background: linear-gradient(135deg, var(--ifm-color-primary-darker), var(--ifm-color-primary-darkest));
+  color: var(--ifm-color-content);
+}
+
+.translationToggle.darkMode.urduActive {
+  background: linear-gradient(135deg, #92400e, #78350f);
+  color: #fef3c7;
+}
+
+.toggleIcon {
+  display: flex;
+  align-items: center;
+}
+
+.flag {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.toggleText {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.translatedContent {
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.translatedContent.urduContent {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', 'Segoe UI', serif;
+  line-height: 1.8;
+  font-size: 1.1rem; /* Slightly larger for better readability */
+  color: #2d3748;
+  font-weight: 450; /* Slightly bolder for better readability */
+}
+
+.translatedContent.urduContent p {
+  text-align: right;
+  direction: rtl;
+  margin-bottom: 1.2rem; /* Slightly more spacing */
+  line-height: 1.8;
+  hyphens: auto; /* For better text wrapping */
+  word-break: keep-all; /* Preserve word integrity */
+}
+
+.translatedContent.urduContent h1,
+.translatedContent.urduContent h2,
+.translatedContent.urduContent h3,
+.translatedContent.urduContent h4 {
+  direction: rtl;
+  text-align: right;
+  margin: 1.8rem 0 1.2rem 0; /* More spacing for headings */
+  font-weight: 600;
+}
+
+.translatedContent.urduContent ul,
+.translatedContent.urduContent ol {
+  text-align: right;
+  direction: rtl;
+  padding-right: 1.8rem; /* More indentation */
+  padding-left: 0;
+  margin-bottom: 1.2rem;
+  list-style-position: outside;
+}
+
+.translatedContent.urduContent li {
+  margin-bottom: 0.6rem;
+  text-align: right;
+  direction: rtl;
+  line-height: 1.7;
+}
+
+.translatedContent.urduContent blockquote {
+  border-right: 4px solid var(--ifm-color-primary);
+  border-left: none;
+  padding: 1.2rem 1.8rem 1.2rem 1rem;
+  margin: 1.8rem 0;
+  text-align: right;
+  direction: rtl;
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 95%);
+  border-radius: 0 8px 8px 0;
+}
+
+.translatedContent.urduContent pre,
+.translatedContent.urduContent code {
+  direction: ltr; /* Code should remain LTR */
+  text-align: left;
+  unicode-bidi: embed;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.translatedContent.urduContent strong,
+.translatedContent.urduContent b {
+  font-weight: 700; /* Ensure bold text is clearly visible */
+}
+
+.translatedContent.urduContent em,
+.translatedContent.urduContent i {
+  font-style: italic;
+}
+
+.translatedContent.urduContent a {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+.translatedContent.urduContent table {
+  direction: rtl;
+  text-align: right;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.translatedContent.urduContent table th,
+.translatedContent.urduContent table td {
+  text-align: right;
+  direction: rtl;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.translatedContent.urduContent img {
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.translatedContent.englishContent {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .translationHeader {
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+  }
+
+  .translationToggle {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    min-height: 40px;
+    min-width: 140px;
+  }
+
+  .toggleIcon {
+    font-size: 1rem;
+  }
+
+  .toggleText {
+    font-size: 0.85rem;
+  }
+
+  .translatedContent.urduContent {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .translatedContent.urduContent h1 {
+    font-size: 1.6rem;
+    margin: 1.5rem 0 1rem 0;
+  }
+
+  .translatedContent.urduContent h2 {
+    font-size: 1.4rem;
+    margin: 1.3rem 0 0.9rem 0;
+  }
+
+  .translatedContent.urduContent h3 {
+    font-size: 1.2rem;
+    margin: 1.1rem 0 0.8rem 0;
+  }
+
+  .translatedContent.urduContent h4 {
+    font-size: 1.1rem;
+    margin: 1rem 0 0.7rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .translationHeader {
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    padding: 0.2rem 0;
+  }
+
+  .translationToggle {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+    min-height: 38px;
+    min-width: 130px;
+    width: auto;
+  }
+
+  .toggleIcon {
+    font-size: 0.9rem;
+  }
+
+  .toggleText {
+    font-size: 0.75rem;
+  }
+
+  .translatedContent.urduContent {
+    font-size: 1rem;
+    line-height: 1.65;
+    padding: 0 0.5rem;
+  }
+
+  .translatedContent.urduContent h1 {
+    font-size: 1.5rem;
+    margin: 1.4rem 0 0.9rem 0;
+  }
+
+  .translatedContent.urduContent h2 {
+    font-size: 1.3rem;
+    margin: 1.2rem 0 0.8rem 0;
+  }
+
+  .translatedContent.urduContent h3 {
+    font-size: 1.1rem;
+    margin: 1rem 0 0.7rem 0;
+  }
+
+  .translatedContent.urduContent p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.65;
+  }
+
+  .translatedContent.urduContent ul,
+  .translatedContent.urduContent ol {
+    padding-right: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .translatedContent.urduContent li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .translationToggle {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    min-height: 36px;
+    min-width: 120px;
+  }
+
+  .toggleText {
+    font-size: 0.7rem;
+  }
+
+  .translatedContent.urduContent {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .translatedContent.urduContent h1 {
+    font-size: 1.4rem;
+  }
+
+  .translatedContent.urduContent h2 {
+    font-size: 1.2rem;
+  }
+
+  .translatedContent.urduContent h3 {
+    font-size: 1.05rem;
+  }
+}
+
+/* Large screens optimization */
+@media (min-width: 1200px) {
+  .translatedContent.urduContent {
+    font-size: 1.15rem;
+    line-height: 1.85;
+  }
+
+  .translatedContent.urduContent h1 {
+    font-size: 2rem;
+  }
+
+  .translatedContent.urduContent h2 {
+    font-size: 1.6rem;
+  }
+
+  .translatedContent.urduContent h3 {
+    font-size: 1.4rem;
+  }
+
+  .translatedContent.urduContent h4 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .translationToggle {
+    min-height: 48px; /* Larger touch target */
+    padding: 0.6rem 1rem;
+  }
+
+  .translatedContent.urduContent a {
+    /* Make links easier to tap */
+    padding: 0.25rem;
+    margin: -0.25rem;
+  }
+}
+
+/* Screen reader and accessibility improvements */
+.translationToggle:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.translatedContent.urduContent {
+  /* Ensure proper contrast for readability */
+  color-contrast: 4.5%;
+}
+
+/* Print styles */
+@media print {
+  .translationHeader {
+    display: none;
+  }
+
+  .translatedContent.urduContent {
+    direction: rtl;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+}
+
+/* Animation for language switching */
+.translationContainer .translatedContent {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure proper RTL support for code blocks */
+.translatedContent.urduContent pre,
+.translatedContent.urduContent code {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: embed;
+}
+
+/* Adjust for technical terms that should remain LTR */
+.translatedContent.urduContent code,
+.translatedContent.urduContent .token {
+  direction: ltr;
+  display: inline-block;
+}

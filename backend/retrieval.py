@@ -23,7 +23,16 @@ def initialize_qdrant_client() -> QdrantClient:
     """
     Initialize Qdrant client with connection validation
     """
-    config = load_config()
+    try:
+        config = load_config()
+    except Exception as e:
+        logger.error(f"Failed to load configuration for Qdrant: {str(e)}")
+        raise ConnectionError(f"Could not load configuration: {str(e)}")
+
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.warning("Qdrant not configured - cannot initialize client")
+        raise ConnectionError("Qdrant not configured - please set QDRANT_URL and QDRANT_API_KEY in environment variables")
 
     try:
         client = QdrantClient(
@@ -55,49 +64,80 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
     """
     start_time = time.time()
 
-    # Get configuration
-    config = load_config()
-    if collection_name is None:
-        collection_name = config['collection_name']
-    if top_k is None:
-        top_k = config['max_retrievals']
+    try:
+        # Get configuration
+        config = load_config()
+        if collection_name is None:
+            collection_name = config.get('collection_name', 'rag_embedding')
+        if top_k is None:
+            top_k = config.get('max_retrievals', 5)
+    except Exception as e:
+        logger.error(f"Failed to load configuration for content retrieval: {str(e)}")
+        execution_time = (time.time() - start_time) * 1000
+        raise ConnectionError(f"Could not load configuration: {str(e)}")
+
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.warning("Qdrant not enabled - returning empty results")
+        execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+
+        result = {
+            'query_text': query_text,
+            'retrieved_chunks': [],
+            'retrieval_stats': {
+                'chunks_retrieved': 0,
+                'execution_time_ms': execution_time,
+                'collection_name': collection_name,
+                'top_k_requested': top_k,
+                'qdrant_enabled': False,
+                'reason': 'Qdrant not configured'
+            }
+        }
+        logger.info(f"Qdrant not configured, returning empty results for query: '{query_text[:50]}...' in {execution_time:.2f}ms")
+        return result
 
     try:
         # Initialize Qdrant client
         qdrant_client = initialize_qdrant_client()
 
-        # For now, we'll use a placeholder embedding approach
-        # In a real implementation, we'd use the appropriate embedding service
-        # Since the requirement is for OpenAI Agents SDK, we'll need to implement properly
+        # Initialize Cohere client for embeddings
+        import cohere
+        co = cohere.Client(config['cohere_api_key'])
 
-        # For demonstration, we'll create a mock embedding
-        # In a real implementation, this would call the appropriate embedding API
-        import random
-        query_embedding = [random.random() for _ in range(1536)]  # Typical embedding dimension
+        # Generate embedding for the query using Cohere
+        response = co.embed(
+            texts=[query_text],
+            model='embed-english-v3.0',  # Using Cohere's latest embedding model
+            input_type='search_query'
+        )
+        query_embedding = response.embeddings[0]
 
-        # Perform semantic search in Qdrant
-        search_results = qdrant_client.search(
+        # Perform semantic search in Qdrant using query_points method (newer API)
+        from qdrant_client.http import models
+        search_results = qdrant_client.query_points(
             collection_name=collection_name,
-            query_vector=query_embedding,
+            query=query_embedding,
             limit=top_k,
             with_payload=True,
             with_vectors=False
         )
 
-        # Format results
+        # Format results - query_points returns PointStruct or similar objects
         retrieved_chunks = []
-        for point in search_results:
+        for point in search_results.points:
+            # Extract payload safely
+            payload = point.payload if point.payload else {}
             chunk = {
-                'text': point.payload.get('text', ''),
-                'similarity_score': point.score,
+                'text': payload.get('text', ''),
+                'similarity_score': point.score if hasattr(point, 'score') else 0.0,
                 'metadata': {
-                    'module': point.payload.get('module', ''),
-                    'page': point.payload.get('page', ''),
-                    'heading': point.payload.get('heading', ''),
-                    'url': point.payload.get('url', ''),
-                    'title': point.payload.get('title', '')
+                    'module': payload.get('module', ''),
+                    'page': payload.get('page', ''),
+                    'heading': payload.get('heading', ''),
+                    'url': payload.get('url', ''),
+                    'title': payload.get('title', '')
                 },
-                'vector_id': point.id
+                'vector_id': point.id if hasattr(point, 'id') else None
             }
             retrieved_chunks.append(chunk)
 
@@ -110,7 +150,8 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
                 'chunks_retrieved': len(retrieved_chunks),
                 'execution_time_ms': execution_time,
                 'collection_name': collection_name,
-                'top_k_requested': top_k
+                'top_k_requested': top_k,
+                'qdrant_enabled': True
             }
         }
 
@@ -119,7 +160,23 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
 
     except Exception as e:
         logger.error(f"Failed to retrieve content: {str(e)}")
-        raise ConnectionError(f"Could not retrieve content: {str(e)}")
+        execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+
+        # Return empty results if Qdrant fails but don't raise an exception that breaks the flow
+        result = {
+            'query_text': query_text,
+            'retrieved_chunks': [],
+            'retrieval_stats': {
+                'chunks_retrieved': 0,
+                'execution_time_ms': execution_time,
+                'collection_name': collection_name,
+                'top_k_requested': top_k,
+                'qdrant_enabled': True,
+                'error': str(e)
+            }
+        }
+        logger.warning(f"Qdrant retrieval failed, returning empty results for query: '{query_text[:50]}...' in {execution_time:.2f}ms. Error: {str(e)}")
+        return result
 
 
 def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
@@ -132,9 +189,32 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
     Returns:
         Dictionary containing connection status and collection info
     """
-    config = load_config()
-    if collection_name is None:
-        collection_name = config['collection_name']
+    try:
+        config = load_config()
+        if collection_name is None:
+            collection_name = config.get('collection_name', 'rag_embedding')
+    except Exception as e:
+        logger.error(f"Failed to load configuration for Qdrant validation: {str(e)}")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'qdrant_enabled': False,
+            'error': f"Configuration error: {str(e)}"
+        }
+
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.info("Qdrant not configured - validation skipped")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'qdrant_enabled': False,
+            'error': "Qdrant not configured - please set QDRANT_URL and QDRANT_API_KEY in environment variables"
+        }
 
     try:
         client = initialize_qdrant_client()
@@ -160,7 +240,8 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
                 'vectors_count': vector_count,
                 'indexed_vectors_count': getattr(collection_info, 'indexed_vectors_count', 0) if collection_info else 0,
                 'config': getattr(collection_info, 'config', {}) if collection_info else {}
-            } if collection_info else None
+            } if collection_info else None,
+            'qdrant_enabled': True
         }
 
         logger.info(f"Qdrant connection validated: collection '{collection_name}' exists with {vector_count} vectors")
@@ -168,7 +249,14 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Failed to validate Qdrant connection: {str(e)}")
-        raise ConnectionError(f"Could not validate Qdrant connection: {str(e)}")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'qdrant_enabled': True,
+            'error': f"Connection error: {str(e)}"
+        }
 
 
 if __name__ == "__main__":

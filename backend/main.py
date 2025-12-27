@@ -1,101 +1,77 @@
 """
-RAG Agent Construction
-
-Backend service using FastAPI to implement a RAG (Retrieval-Augmented Generation) agent
-that connects to Qdrant Cloud and processes user queries using the existing `rag_embedding`
-collection. The system retrieves relevant content chunks and generates accurate answers
-grounded in the book content, exposing API endpoints for external consumption.
+RAG Agent Construction - Final Version
+Includes: Async RAG, CORS, Rate limiting, /chat/send endpoint
 """
 
 import os
 import sys
 import logging
 from typing import Dict, Any, Optional, List
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Body, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+import uuid
+import asyncio
 
-
-# Custom exception classes
-class ConnectionError(Exception):
-    """Raised when a connection error occurs"""
-    pass
-
-
-class ConfigurationError(Exception):
-    """Raised when configuration parameters are invalid"""
-    pass
-
-
-class AgentError(Exception):
-    """Raised when any step in the agent processing fails"""
-    pass
-
-
-class ValidationError(Exception):
-    """Raised when validation parameters are invalid"""
-    pass
-
-
-class AuthenticationError(Exception):
-    """Raised when authentication fails"""
-    pass
-
-
-class NotFoundError(Exception):
-    """Raised when a requested resource is not found"""
-    pass
-
-
-class RateLimitError(Exception):
-    """Raised when API rate limits are exceeded"""
-    pass
-
-
-class IntegrityError(Exception):
-    """Raised when retrieved content doesn't match expected format"""
-    pass
-
-# Configure logging
+# -------------------------
+# Logging
+# -------------------------
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('rag_agent.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
+    handlers=[logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger(__name__)
 
-# Initialize rate limiter
+# -------------------------
+# Rate Limiter
+# -------------------------
 limiter = Limiter(key_func=get_remote_address)
-app = FastAPI(
-    title="RAG Agent API",
-    description="Retrieval-Augmented Generation agent for answering questions about book content",
-    version="1.0.0"
-)
+app = FastAPI(title="RAG Agent API", version="1.0.0")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Import modules (will be implemented in other files)
-from config import load_config, validate_config
+# -------------------------
+# CORS Configuration
+# -------------------------
+origins = [
+    "http://localhost:3000",  # Frontend dev
+    "http://localhost:8000",
+    "*",  # allow all origins (for testing)
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# -------------------------
+# Import RAG modules
+# -------------------------
+from config import load_config
 from agent import process_query, initialize_openai_client
-from retrieval import retrieve_content, validate_qdrant_connection
+from retrieval import validate_qdrant_connection
 
-
+# -------------------------
+# Pydantic models
+# -------------------------
 class QueryRequest(BaseModel):
-    """Request model for query endpoint"""
     query: str
+    selected_text: Optional[str] = None
+    context_metadata: Optional[Dict[str, Any]] = None
     max_tokens: Optional[int] = 500
     temperature: Optional[float] = 0.7
     include_sources: Optional[bool] = True
-
+    user_preferences: Optional[Dict[str, Any]] = None
 
 class QueryResponse(BaseModel):
-    """Response model for query endpoint"""
     query: str
     answer: str
     sources: Optional[List[Dict[str, Any]]]
@@ -103,54 +79,46 @@ class QueryResponse(BaseModel):
     retrieval_stats: Dict[str, Any]
     query_id: str
 
-
-from fastapi import Request
-
+# -------------------------
+# Health Endpoint
+# -------------------------
 @app.get("/health")
-@limiter.limit("30/minute")  # 30 requests per minute per IP (health checks are more frequent)
+@limiter.limit("30/minute")
 async def health_check(request: Request):
-    """Health check endpoint to verify service status"""
     import time
     from datetime import datetime
-
     start_time = time.time()
-
-    # Check Qdrant connection
     qdrant_status = "disconnected"
+    openai_status = "disconnected"
+
     try:
         qdrant_conn = validate_qdrant_connection()
         qdrant_status = "connected" if qdrant_conn['connected'] else "disconnected"
     except:
-        qdrant_status = "disconnected"
+        pass
 
-    # Check OpenAI connection
-    openai_status = "disconnected"
     try:
         initialize_openai_client()
         openai_status = "connected"
     except:
-        openai_status = "disconnected"
+        pass
 
-    # Determine overall status
     overall_status = "healthy" if qdrant_status == "connected" and openai_status == "connected" else "degraded"
-
-    response_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+    response_time = (time.time() - start_time) * 1000
 
     return {
         "status": overall_status,
         "timestamp": datetime.utcnow().isoformat() + "Z",
-        "services": {
-            "qdrant": qdrant_status,
-            "openai": openai_status
-        },
+        "services": {"qdrant": qdrant_status, "openai": openai_status},
         "response_time_ms": response_time
     }
 
-
+# -------------------------
+# Agent Info Endpoint
+# -------------------------
 @app.get("/info")
-@limiter.limit("20/minute")  # 20 requests per minute per IP
+@limiter.limit("20/minute")
 async def get_agent_info(request: Request):
-    """Information about the agent and its capabilities"""
     return {
         "agent_name": "RAG Book Assistant",
         "version": "1.0.0",
@@ -166,94 +134,57 @@ async def get_agent_info(request: Request):
         "collection_name": "rag_embedding"
     }
 
-
-
-@app.post("/query", response_model=QueryResponse)
-@limiter.limit("10/minute")  # 10 requests per minute per IP
-async def query_endpoint(request: Request, query_request: QueryRequest):
-    """Process a user query and return a generated answer based on retrieved content"""
+# -------------------------
+# Chat / RAG Endpoint
+# -------------------------
+@app.post("/chat/send")
+@limiter.limit("10/minute")
+async def chat_send(request: Request, query_request: QueryRequest = Body(...)):
+    """
+    Async endpoint for frontend chat queries.
+    Runs RAG agent and returns structured response.
+    """
     try:
-        # Process the query using the agent
-        result = process_query(
-            query_text=query_request.query,
-            max_tokens=query_request.max_tokens,
-            temperature=query_request.temperature
+        loop = asyncio.get_running_loop()
+        result = await loop.run_in_executor(
+            None,
+            lambda: process_query(
+                query_text=query_request.query,
+                selected_text=query_request.selected_text,
+                max_tokens=query_request.max_tokens,
+                temperature=query_request.temperature
+            )
         )
 
-        # Generate a query ID
-        import uuid
-        query_id = str(uuid.uuid4())
-
-        # Prepare the response
-        response = {
-            "query": request.query,
-            "answer": result['answer'],
-            "sources": result['sources'] if request.include_sources else [],
-            "confidence": result['confidence_score'],
-            "retrieval_stats": result['retrieval_details']['retrieval_stats'],
-            "query_id": query_id
+        return {
+            "reply": result.get("answer", ""),
+            "sources": result.get("sources", []),
+            "confidence": result.get("confidence_score", 0),
+            "retrieval_stats": result.get("retrieval_details", {}).get("retrieval_stats", {}),
+            "query_id": str(uuid.uuid4())
         }
 
-        return response
-
     except Exception as e:
-        logger.error(f"Error processing query: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        error_msg = str(e)
+        logger.error(f"Error in /chat/send: {error_msg}")
 
+        # Check if this is a configuration error that can be more specifically described
+        if "QDRANT_URL" in error_msg or "configuration" in error_msg.lower():
+            raise HTTPException(
+                status_code=500,
+                detail="Configuration error: Required environment variables are missing. Please check that QDRANT_URL and other required configuration variables are set."
+            )
+        else:
+            raise HTTPException(status_code=500, detail=error_msg)
 
-import argparse
-
-
-def start_server(host: str = None, port: int = None):
-    """
-    Start the RAG Agent server with specified host and port
-    """
-    config = load_config()
-
-    if host is None:
-        host = config['host']
-    if port is None:
-        port = config['port']
-
-    logger.info(f"Starting RAG Agent server on {host}:{port}")
-
-    import uvicorn
-    uvicorn.run(app, host=host, port=port, reload=False)
-
-
+# -------------------------
+# Server Start
+# -------------------------
 def main():
-    """Main function to start the server with command-line arguments"""
-    try:
-        parser = argparse.ArgumentParser(description='RAG Agent Server')
-        parser.add_argument('--host', default=None, help='Host to bind to (default: from config)')
-        parser.add_argument('--port', type=int, default=None, help='Port to bind to (default: from config)')
-        parser.add_argument('--reload', action='store_true', help='Enable auto-reload (development)')
-
-        args = parser.parse_args()
-
-        config = load_config()
-
-        # Use command-line args if provided, otherwise use config values
-        host = args.host if args.host is not None else config['host']
-        port = args.port if args.port is not None else config['port']
-        reload = args.reload
-
-        logger.info(f"Starting RAG Agent server on {host}:{port}")
-
-        import uvicorn
-        uvicorn.run(
-            app,
-            host=host,
-            port=port,
-            reload=reload
-        )
-    except KeyboardInterrupt:
-        logger.info("Server shutdown requested by user")
-        sys.exit(0)
-    except Exception as e:
-        logger.error(f"Failed to start server: {str(e)}")
-        sys.exit(1)
-
+    config = load_config()
+    host = config.get("host", "127.0.0.1")
+    port = config.get("port", 8000)
+    uvicorn.run(app, host=host, port=port, reload=True)
 
 if __name__ == "__main__":
     main()

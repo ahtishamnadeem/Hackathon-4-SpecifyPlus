@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkfrontend_book=globalThis.webpackChunkfrontend_book||[]).push([[8913],{8913(o,b,k){k.r(b)}}]);

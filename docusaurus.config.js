@@ -98,9 +98,22 @@ const config = {
             label: 'Module 1',
           },
           {
-            to: '/docs/module-1/intro-to-ros2',
-            label: 'Chapter 1',
-            position: 'left'
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'left',
+            label: 'Module 2',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'left',
+            label: 'Module 3',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'left',
+            label: 'Module 4',
           },
           {
             href: 'https://github.com/your-username/ros2-fundamentals-book',
@@ -117,7 +130,19 @@ const config = {
             items: [
               {
                 label: 'Module 1: The Robotic Nervous System',
-                to: '/docs/module-1/intro-to-ros2',
+                to: '/docs/module-1',
+              },
+              {
+                label: 'Module 2: Advanced ROS 2 Concepts',
+                to: '/docs/module-2',
+              },
+              {
+                label: 'Module 3: Perception and Navigation Systems',
+                to: '/docs/module-3',
+              },
+              {
+                label: 'Module 4: AI Integration and Capstone Project',
+                to: '/docs/module-4',
               },
             ],
           },
@@ -144,7 +169,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by ❤️ | CodeWithAhtii`,
       },
       prism: {
         theme: prismThemes.github,

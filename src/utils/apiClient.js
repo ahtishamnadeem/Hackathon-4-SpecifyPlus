@@ -7,7 +7,7 @@
 import axios from 'axios';
 
 class ApiClient {
-  constructor(baseURL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000') {
+  constructor(baseURL = this.getBackendURL()) {
     this.client = axios.create({
       baseURL,
       timeout: 30000, // 30 seconds timeout
@@ -39,6 +39,19 @@ class ApiClient {
         return Promise.reject(error);
       }
     );
+  }
+
+  /**
+   * Get the backend URL, checking for environment variables or using default
+   * @returns {string} The backend URL
+   */
+  getBackendURL() {
+    // Check if we're in a Node.js environment first
+    if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_BACKEND_URL) {
+      return process.env.REACT_APP_BACKEND_URL;
+    }
+    // In browser environment, check for window-based configuration or use default
+    return 'http://localhost:8000'; // Default backend URL
   }
 
   /**
