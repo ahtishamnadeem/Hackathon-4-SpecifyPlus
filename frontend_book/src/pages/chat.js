@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
-import styles from './index.module.css';
+import styles from './chat.module.css';
 import FloatingChatbot from '../components/FloatingChatbot';
 
 function ChatPage() {
