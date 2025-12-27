@@ -17,7 +17,17 @@
       "Bash(cmd /c \"copy \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env\"\" \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\\\\.env.backup\"\"\")",
       "Bash(dir staticimghero-banner-img.png)",
       "Bash(dir staticimg /b)",
-      "Bash(cmd /c \"dir static\\\\img\")"
+      "Bash(cmd /c \"dir static\\\\img\")",
+      "Bash(dir /s)",
+      "Bash(findstr \"\\\\.env\")",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\frontend_book\" /s)",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\frontend_book\\\\docs\" /s)",
+      "Bash(dir backend*.env* /s)",
+      "Bash(dir \"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\" /s)",
+      "Bash(findstr -i env)",
+      "Bash(cmd /c \"dir \"\"C:\\\\Users\\\\HP\\\\Links\\\\Desktop\\\\OpenAiAgentsSDK\\\\AI-agents-giaic-Quar4\\\\Career-mentor-agent-main\\\\Hackathon-4-SpecifyPlus\\\\backend\"\" /s | findstr -i env\")",
+      "Bash(python -c \"from config import load_config; config = load_config\\(\\); print\\(''Qdrant enabled:'', config.get\\(''qdrant_enabled'', False\\)\\); print\\(''Qdrant URL length:'', len\\(config.get\\(''qdrant_url'', ''''\\)\\) if config.get\\(''qdrant_url''\\) else 0\\)\")",
+      "Bash(python -c \"from retrieval import validate_qdrant_connection; result = validate_qdrant_connection\\(\\); print\\(''Connected:'', result[''connected'']\\); print\\(''Qdrant enabled:'', result[''qdrant_enabled'']\\); print\\(''Error:'', result.get\\(''error'', ''None''\\)\\)\")"
     ]
   }
 }

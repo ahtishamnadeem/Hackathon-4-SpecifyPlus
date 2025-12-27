@@ -219,7 +219,12 @@ const FloatingChatbot = () => {
       {isOpen && (
         <div className={styles.chatContainer}>
           <div className={styles.chatHeader}>
-            <h3 className={styles.headerTitle}>RAG Agent Chat</h3>
+            <h3 className={styles.headerTitle}>
+              <span className={styles.agentStatus}>
+                <span className={styles.statusIndicator}></span>
+                Agent is Online
+              </span>
+            </h3>
             <div className={styles.headerActions}>
               <button
                 onClick={handleClearChat}

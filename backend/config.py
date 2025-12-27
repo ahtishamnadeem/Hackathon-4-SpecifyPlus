@@ -29,14 +29,19 @@ def load_config() -> dict:
 
     # Qdrant configuration
     qdrant_url = os.getenv('QDRANT_URL')
-    if not qdrant_url:
-        raise ConfigurationError("QDRANT_URL environment variable is required")
-    config['qdrant_url'] = qdrant_url
-
     qdrant_api_key = os.getenv('QDRANT_API_KEY')
-    if not qdrant_api_key:
-        raise ConfigurationError("QDRANT_API_KEY environment variable is required")
-    config['qdrant_api_key'] = qdrant_api_key
+
+    # Check if Qdrant is configured (both URL and API key are provided)
+    if qdrant_url and qdrant_api_key and qdrant_url.strip() != '' and qdrant_api_key.strip() != '':
+        config['qdrant_url'] = qdrant_url.strip()
+        config['qdrant_api_key'] = qdrant_api_key.strip()
+        config['qdrant_enabled'] = True
+        logger.info("Qdrant configuration loaded successfully")
+    else:
+        config['qdrant_enabled'] = False
+        config['qdrant_url'] = None
+        config['qdrant_api_key'] = None
+        logger.warning("Qdrant not configured - RAG functionality will be disabled. The system will operate in general knowledge mode only.")
 
     # Cohere configuration for embeddings
     cohere_api_key = os.getenv('COHERE_API_KEY')

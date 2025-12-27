@@ -169,7 +169,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by ❤️ | CodeWithAhtii`,
       },
       prism: {
         theme: prismThemes.github,

@@ -88,9 +88,9 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       colorMode: {
-        defaultMode: 'light',
+        defaultMode: 'dark',
         disableSwitch: false,
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false, // Changed to false so it always defaults to dark regardless of system preference
       },
       metadata: [
         {name: 'keywords', content: 'ROS 2, robotics, AI, physical AI, humanoid robotics, navigation, Isaac Sim, Isaac ROS, robot operating system, autonomous robots, machine learning, computer vision'},
@@ -206,7 +206,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by | CodeWithAhtii`,
+        copyright: `Copyright © ${new Date().getFullYear()} ROS 2 Fundamentals Book. Built with Docusaurus.\nDeveloped by ❤️ | CodeWithAhtii`,
       },
       prism: {
         theme: prismThemes.github,

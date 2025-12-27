@@ -345,10 +345,11 @@ h4 {
 .footer__title {
   font-weight: var(--ifm-font-weight-bold);
   margin-bottom: 1.25rem;
-  color: var(--ifm-color-content);
+  color: var(--ifm-color-content) !important;
   font-size: 1.1rem;
   position: relative;
   display: inline-block;
+  opacity: 0.95 !important; /* Ensure good visibility in light mode */
 }
 
 .footer__title::after {
@@ -375,27 +376,158 @@ h4 {
 
 /* Style for the actual links inside footer */
 .footer__link {
-  color: var(--ifm-color-content-secondary);
+  color: var(--ifm-color-content-secondary) !important;
   transition: all 0.3s ease;
   position: relative;
-  display: block;
-  text-decoration: none;
-  padding: 0.25rem 0;
+  display: inline-block; /* Changed to inline-block for proper alignment */
+  text-decoration: none !important;
+  padding: 0.25rem 0 !important;
+  font-weight: 600 !important; /* Bolder for better visibility */
+  margin-bottom: 0.5rem !important; /* Proper spacing */
+  font-size: 0.95rem !important; /* Slightly larger font */
+  line-height: 1.5 !important; /* Better readability */
 }
 
 .footer__link:hover {
-  color: var(--ifm-color-primary);
-  transform: translateX(4px);
-  text-decoration: none;
+  color: var(--ifm-color-primary) !important;
+  transform: translateX(4px) !important;
+  text-decoration: underline !important;
 }
 
-/* Improve visibility in light mode */
+/* Improve visibility in light mode - maximum contrast */
 html[data-theme='light'] .footer__link {
-  color: color-mix(in srgb, var(--ifm-color-content), transparent 30%);
+  color: #000000 !important; /* Black color for maximum visibility in light mode */
+  opacity: 1 !important; /* Full opacity */
+  font-weight: 600 !important; /* Ensure bold */
+  text-shadow: none !important; /* Remove if causing issues */
+}
+
+/* Even more specific selector to ensure visibility in light mode */
+html[data-theme='light'] .footer .footer__link {
+  color: #000000 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+/* Override any potential theme defaults */
+html[data-theme='light'] .footer__col .footer__link {
+  color: #000000 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* Force link color in light mode regardless of other styles */
+html[data-theme='light'] .footer__item a {
+  color: #000000 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
 }
 
 html[data-theme='light'] .footer__link:hover {
-  color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary) !important;
+  opacity: 1 !important;
+  transform: translateX(6px) !important;
+}
+
+/* Enhance dark mode visibility as well */
+html[data-theme='dark'] .footer__link {
+  color: var(--ifm-color-content) !important;
+  opacity: 0.9 !important;
+}
+
+html[data-theme='dark'] .footer__link:hover {
+  color: var(--ifm-color-primary-light) !important;
+  opacity: 1 !important;
+}
+
+/* Last link in a group should not have bottom margin */
+.footer__link:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure links are always visible even with high contrast */
+@media (prefers-contrast: high) {
+  .footer__link {
+    color: var(--ifm-color-content) !important;
+    font-weight: bold !important;
+    border-bottom: 1px solid currentColor !important;
+  }
+}
+
+
+/* Improved responsive design for footer links */
+@media (max-width: 768px) {
+  .footer__links {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .footer__link {
+    font-size: 1rem !important; /* Slightly larger on mobile for better touch targets */
+    padding: 0.3rem 0 !important;
+    display: block !important; /* Stack vertically on mobile */
+    margin-bottom: 0.75rem !important;
+    line-height: 1.6 !important; /* Better readability on mobile */
+  }
+
+  html[data-theme='light'] .footer__link {
+    opacity: 1 !important; /* Full opacity on mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  .footer__links {
+    grid-template-columns: 1fr; /* Stack all columns into single column on very small screens */
+    gap: 1rem;
+    padding: 0 1rem; /* Add padding to prevent edge-to-edge content */
+  }
+
+  .footer__link {
+    font-size: 1.05rem !important; /* Even larger on small screens */
+    margin-bottom: 0.8rem !important;
+    padding: 0.4rem 0 !important;
+    display: block !important;
+    text-align: center !important; /* Center align text on very small screens */
+  }
+
+  .footer__title {
+    font-size: 1.1rem !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important; /* Center align titles on small screens */
+  }
+
+  .footer__col {
+    margin-bottom: 1.5rem !important; /* Reduce margin on small screens */
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .footer__links {
+    gap: 0.8rem;
+  }
+
+  .footer__link {
+    font-size: 1rem !important;
+    padding: 0.35rem 0 !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .footer__title {
+    font-size: 1rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+}
+
+/* Ensure proper touch targets for accessibility */
+@media (hover: none) and (pointer: coarse) {
+  .footer__link {
+    min-height: 44px !important; /* Minimum touch target size */
+    min-width: 44px !important;
+    display: block !important;
+    padding: 0.7rem 0 !important;
+  }
 }
 
 /* Subtle underline effect on hover */
@@ -430,6 +562,7 @@ html[data-theme='light'] .footer__link:hover {
   margin-bottom: 0;
 }
 
+
 /* Layout for each column */
 .footer__col {
   margin-bottom: 2rem;
@@ -455,6 +588,70 @@ html[data-theme='light'] .footer__link:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 3rem;
+}
+
+/* Improved responsive design for footer links */
+@media (max-width: 768px) {
+  .footer__links {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .footer__link {
+    font-size: 1rem !important; /* Slightly larger on mobile for better touch targets */
+    padding: 0.3rem 0 !important;
+    display: block !important; /* Stack vertically on mobile */
+    margin-bottom: 0.75rem !important;
+    line-height: 1.6 !important; /* Better readability on mobile */
+  }
+
+  html[data-theme='light'] .footer__link {
+    opacity: 1 !important; /* Full opacity on mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  .footer__links {
+    grid-template-columns: 1fr; /* Stack all columns into single column on very small screens */
+    gap: 1rem;
+    padding: 0 1rem; /* Add padding to prevent edge-to-edge content */
+  }
+
+  .footer__link {
+    font-size: 1.05rem !important; /* Even larger on small screens */
+    margin-bottom: 0.8rem !important;
+    padding: 0.4rem 0 !important;
+    display: block !important;
+    text-align: center !important; /* Center align text on very small screens */
+  }
+
+  .footer__title {
+    font-size: 1.1rem !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important; /* Center align titles on small screens */
+  }
+
+  .footer__col {
+    margin-bottom: 1.5rem !important; /* Reduce margin on small screens */
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .footer__links {
+    gap: 0.8rem;
+  }
+
+  .footer__link {
+    font-size: 1rem !important;
+    padding: 0.35rem 0 !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .footer__title {
+    font-size: 1rem !important;
+    margin-bottom: 0.8rem !important;
+  }
 }
 
 /* Footer logo/title section */
@@ -1270,30 +1467,64 @@ summary:focus,
 }
 
 
-/* Theme toggle button styling to ensure visibility in both themes */
+/* Hamburger menu button styling to ensure visibility in both themes */
 .navbar__toggle {
-  color: var(--ifm-color-content);
-  background-color: transparent;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 6px;
-  padding: 0.25rem 0.5rem;
-  margin-left: 0.5rem;
-  transition: all 0.2s ease-in-out;
+  color: var(--ifm-color-content) !important;
+  background-color: transparent !important;
+  border: 2px solid var(--ifm-color-primary) !important;
+  border-radius: 8px !important;
+  padding: 0.4rem 0.6rem !important; /* Increased size */
+  margin-left: 0.5rem !important;
+  transition: all 0.2s ease-in-out !important;
+  min-width: 44px !important; /* Ensure proper touch target size */
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .navbar__toggle:hover {
-  background-color: var(--ifm-color-gray-100);
-  border-color: var(--ifm-color-primary);
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%) !important;
+  border-color: var(--ifm-color-primary) !important;
+  transform: scale(1.05) !important; /* Slightly enlarge on hover */
+}
+
+/* Enhanced visibility in light theme */
+html[data-theme='light'] .navbar__toggle {
+  color: var(--ifm-color-content) !important;
+  background-color: transparent !important;
+  border: 2px solid var(--ifm-color-primary) !important;
+  opacity: 0.9 !important; /* Ensure good visibility */
+}
+
+html[data-theme='light'] .navbar__toggle:hover {
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%) !important;
+  border-color: var(--ifm-color-primary) !important;
+  opacity: 1 !important;
 }
 
 [data-theme='dark'] .navbar__toggle {
-  color: var(--ifm-color-content);
-  background-color: transparent;
-  border: 1px solid var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content) !important;
+  background-color: transparent !important;
+  border: 2px solid var(--ifm-color-primary) !important;
 }
 
 [data-theme='dark'] .navbar__toggle:hover {
-  background-color: var(--ifm-color-emphasis-100);
+  background-color: color-mix(in srgb, var(--ifm-color-primary), transparent 90%) !important;
+}
+
+/* Hide hamburger menu on large devices where navigation is shown inline */
+@media (min-width: 997px) {
+  .navbar__toggle {
+    display: none !important;
+  }
+}
+
+/* Ensure hamburger menu is visible on small devices */
+@media (max-width: 996px) {
+  .navbar__toggle {
+    display: flex !important;
+  }
 }
 
 /* Color mode switch button styling for better visibility in both themes */

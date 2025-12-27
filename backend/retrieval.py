@@ -29,6 +29,11 @@ def initialize_qdrant_client() -> QdrantClient:
         logger.error(f"Failed to load configuration for Qdrant: {str(e)}")
         raise ConnectionError(f"Could not load configuration: {str(e)}")
 
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.warning("Qdrant not configured - cannot initialize client")
+        raise ConnectionError("Qdrant not configured - please set QDRANT_URL and QDRANT_API_KEY in environment variables")
+
     try:
         client = QdrantClient(
             url=config['qdrant_url'],
@@ -63,13 +68,33 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
         # Get configuration
         config = load_config()
         if collection_name is None:
-            collection_name = config['collection_name']
+            collection_name = config.get('collection_name', 'rag_embedding')
         if top_k is None:
-            top_k = config['max_retrievals']
+            top_k = config.get('max_retrievals', 5)
     except Exception as e:
         logger.error(f"Failed to load configuration for content retrieval: {str(e)}")
         execution_time = (time.time() - start_time) * 1000
         raise ConnectionError(f"Could not load configuration: {str(e)}")
+
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.warning("Qdrant not enabled - returning empty results")
+        execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+
+        result = {
+            'query_text': query_text,
+            'retrieved_chunks': [],
+            'retrieval_stats': {
+                'chunks_retrieved': 0,
+                'execution_time_ms': execution_time,
+                'collection_name': collection_name,
+                'top_k_requested': top_k,
+                'qdrant_enabled': False,
+                'reason': 'Qdrant not configured'
+            }
+        }
+        logger.info(f"Qdrant not configured, returning empty results for query: '{query_text[:50]}...' in {execution_time:.2f}ms")
+        return result
 
     try:
         # Initialize Qdrant client
@@ -125,7 +150,8 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
                 'chunks_retrieved': len(retrieved_chunks),
                 'execution_time_ms': execution_time,
                 'collection_name': collection_name,
-                'top_k_requested': top_k
+                'top_k_requested': top_k,
+                'qdrant_enabled': True
             }
         }
 
@@ -134,7 +160,23 @@ def retrieve_content(query_text: str, collection_name: str = None, top_k: int = 
 
     except Exception as e:
         logger.error(f"Failed to retrieve content: {str(e)}")
-        raise ConnectionError(f"Could not retrieve content: {str(e)}")
+        execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+
+        # Return empty results if Qdrant fails but don't raise an exception that breaks the flow
+        result = {
+            'query_text': query_text,
+            'retrieved_chunks': [],
+            'retrieval_stats': {
+                'chunks_retrieved': 0,
+                'execution_time_ms': execution_time,
+                'collection_name': collection_name,
+                'top_k_requested': top_k,
+                'qdrant_enabled': True,
+                'error': str(e)
+            }
+        }
+        logger.warning(f"Qdrant retrieval failed, returning empty results for query: '{query_text[:50]}...' in {execution_time:.2f}ms. Error: {str(e)}")
+        return result
 
 
 def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
@@ -150,7 +192,7 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
     try:
         config = load_config()
         if collection_name is None:
-            collection_name = config['collection_name']
+            collection_name = config.get('collection_name', 'rag_embedding')
     except Exception as e:
         logger.error(f"Failed to load configuration for Qdrant validation: {str(e)}")
         return {
@@ -158,7 +200,20 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
             'collection_exists': False,
             'vector_count': 0,
             'collection_config': None,
+            'qdrant_enabled': False,
             'error': f"Configuration error: {str(e)}"
+        }
+
+    # Check if Qdrant is enabled
+    if not config.get('qdrant_enabled', False):
+        logger.info("Qdrant not configured - validation skipped")
+        return {
+            'connected': False,
+            'collection_exists': False,
+            'vector_count': 0,
+            'collection_config': None,
+            'qdrant_enabled': False,
+            'error': "Qdrant not configured - please set QDRANT_URL and QDRANT_API_KEY in environment variables"
         }
 
     try:
@@ -185,7 +240,8 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
                 'vectors_count': vector_count,
                 'indexed_vectors_count': getattr(collection_info, 'indexed_vectors_count', 0) if collection_info else 0,
                 'config': getattr(collection_info, 'config', {}) if collection_info else {}
-            } if collection_info else None
+            } if collection_info else None,
+            'qdrant_enabled': True
         }
 
         logger.info(f"Qdrant connection validated: collection '{collection_name}' exists with {vector_count} vectors")
@@ -198,6 +254,7 @@ def validate_qdrant_connection(collection_name: str = None) -> Dict[str, Any]:
             'collection_exists': False,
             'vector_count': 0,
             'collection_config': None,
+            'qdrant_enabled': True,
             'error': f"Connection error: {str(e)}"
         }
 
