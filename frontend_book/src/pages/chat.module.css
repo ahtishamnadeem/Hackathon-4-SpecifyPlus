@@ -1,0 +1,55 @@
+/**
+ * CSS module for the chat page
+ */
+
+.chatContainer {
+  padding: 4rem 1rem;
+  min-height: calc(100vh - var(--ifm-navbar-height));
+}
+
+.chatContent {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.chatWrapper {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Animations */
+.slideInFromLeft {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slideInFromLeft 0.6s ease-out forwards;
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 0.2s forwards;
+}
+
+@keyframes slideInFromLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 996px) {
+  .chatContainer {
+    padding: 2rem 1rem;
+  }
+
+  .chatWrapper {
+    justify-content: center;
+  }
+}
