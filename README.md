@@ -1,3 +1,4 @@
+# HACKATHON BY (GIAIC)
 # RAG Agent Integrated Docusaurus Book - Physical AI and Humanoid Robotics
 
 This educational book provides comprehensive coverage of ROS 2 as the robotic nervous system for humanoid control, communication, and embodiment. It is designed for AI and robotics students with basic Python knowledge entering Physical AI and humanoid robotics.
