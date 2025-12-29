@@ -182,9 +182,9 @@ async def chat_send(request: Request, query_request: QueryRequest = Body(...)):
 # -------------------------
 def main():
     config = load_config()
-    host = config.get("host", "0.0.0.0")  # Use 0.0.0.0 for Railway
-    port = int(os.environ.get("PORT", config.get("port", 8000)))  # Use PORT from environment first
-    uvicorn.run(app, host=host, port=port, reload=False)  # Disable reload for production
+    host = config.get("host", "127.0.0.1")
+    port = config.get("port", 8000)
+    uvicorn.run(app, host=host, port=port, reload=True)
 
 if __name__ == "__main__":
     main()
