@@ -182,9 +182,9 @@ async def chat_send(request: Request, query_request: QueryRequest = Body(...)):
 # -------------------------
 def main():
     config = load_config()
-    host = config.get("host", "127.0.0.1")
-    port = config.get("port", 8000)
-    uvicorn.run(app, host=host, port=port, reload=True)
+    host = config.get("host", "0.0.0.0")  # Use 0.0.0.0 for Hugging Face
+    port = int(os.environ.get("PORT", config.get("port", 7860)))  # Hugging Face uses port 7860
+    uvicorn.run(app, host=host, port=port, reload=False)  # Disable reload for production
 
 if __name__ == "__main__":
     main()

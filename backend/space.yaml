@@ -1,0 +1,6 @@
+title: RAG Chatbot Backend
+emoji: 🤖
+color: purple
+sdk: docker
+python_version: "3.11"
+accelerator: cpu
