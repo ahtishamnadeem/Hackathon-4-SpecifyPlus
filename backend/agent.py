@@ -216,7 +216,7 @@ def _process_selected_text_mode(query_text: str, selected_text: str, max_tokens:
             logger.info("Google AI Studio quota/limit error detected - using retrieval-only mode")
 
             # If Gemini fails due to quota/limit, return retrieval-only mode response
-            retrieval_only_answer = f"Note: The LLM service is currently unavailable due to quota limits. However, here is the selected text content related to your query '{query_text}':\n\n{selected_text}"
+            retrieval_only_answer = f"Note: The LLM service is currently unavailable due to quota limits. However, here is the selected text content related to your query '{query_text}':" + chr(10) + chr(10) + f"{selected_text}"
 
             execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 
@@ -341,7 +341,7 @@ def _process_selected_text_mode(query_text: str, selected_text: str, max_tokens:
                 execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 
                 # If both APIs fail, return retrieval-only mode response
-                retrieval_only_answer = f"Note: The LLM service is currently unavailable due to quota limits. However, here is the selected text content related to your query '{query_text}':\n\n{selected_text}"
+                retrieval_only_answer = f"Note: The LLM service is currently unavailable due to quota limits. However, here is the selected text content related to your query '{query_text}':" + chr(10) + chr(10) + f"{selected_text}"
 
                 result = {
                     'query_text': query_text,
@@ -516,7 +516,7 @@ def _process_rag_mode(query_text: str, max_tokens: Optional[int], temperature: O
                         'source_heading': chunk['metadata'].get('heading', '')
                     })
 
-                retrieved_chunks_text = "\n\n".join([f"Source: {chunk['source_url']} | Page: {chunk['source_page']} | Heading: {chunk['source_heading']} | Score: {chunk['similarity_score']:.3f}\nContent: {chunk['text']}\n" for chunk in retrieved_chunks_formatted])
+                retrieved_chunks_text = chr(10)+chr(10).join([f"Source: {chunk['source_url']} | Page: {chunk['source_page']} | Heading: {chunk['source_heading']} | Score: {chunk['similarity_score']:.3f}" + chr(10) + f"Content: {chunk['text']}" + chr(10) for chunk in retrieved_chunks_formatted])
 
                 retrieval_only_answer = f"""--- Retrieval-Only Mode Activated ---
 LLM Service Unavailable Due to Quota Limits
@@ -655,7 +655,7 @@ Note: The LLM service is currently unavailable due to quota limits. These are ra
 Both LLM Services Unavailable Due to Quota Limits
 However, here are the most relevant chunks from the knowledge base related to your query '{query_text}':
 
-{chr(10).join([f"Source: {chunk['source_url']} | Page: {chunk['source_page']} | Heading: {chunk['source_heading']} | Score: {chunk['similarity_score']:.3f}\nContent: {chunk['text']}{chr(10)}" for chunk in retrieved_chunks_formatted])}
+{chr(10).join([f"Source: {chunk['source_url']} | Page: {chunk['source_page']} | Heading: {chunk['source_heading']} | Score: {chunk['similarity_score']:.3f}" + chr(10) + f"Content: {chunk['text']}{chr(10)}" for chunk in retrieved_chunks_formatted])}
 
 Note: Both LLM services are currently unavailable due to quota limits. These are raw chunks from the knowledge base.
 """
@@ -819,7 +819,7 @@ Note: Both LLM services are currently unavailable due to quota limits. These are
                     logger.error(f"OpenAI fallback also failed in general knowledge mode: {str(openai_error)}")
 
                     # If both APIs fail in general knowledge mode, return a simple response
-                    fallback_answer = f"--- Based on general robotics knowledge (not from the book): ---\n\nI don't have specific information about '{query_text}' in the book content, and I'm unable to access the LLM service for general knowledge. Please check other resources or try rephrasing your question."
+                    fallback_answer = f"--- Based on general robotics knowledge (not from the book): ---" + chr(10) + chr(10) + f"I don't have specific information about '{query_text}' in the book content, and I'm unable to access the LLM service for general knowledge. Please check other resources or try rephrasing your question."
 
                     execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 
@@ -909,7 +909,7 @@ Note: Both LLM services are currently unavailable due to quota limits. These are
                     logger.error(f"OpenAI fallback also failed in general knowledge mode: {str(openai_error)}")
 
                     # If both APIs fail in general knowledge mode, return a simple response
-                    fallback_answer = f"--- Based on general robotics knowledge (not from the book): ---\n\nI don't have specific information about '{query_text}' in the book content, and I'm unable to access the LLM service for general knowledge. Please check other resources or try rephrasing your question."
+                    fallback_answer = f"--- Based on general robotics knowledge (not from the book): ---" + chr(10) + chr(10) + f"I don't have specific information about '{query_text}' in the book content, and I'm unable to access the LLM service for general knowledge. Please check other resources or try rephrasing your question."
 
                     execution_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 
