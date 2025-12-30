@@ -65,9 +65,7 @@ def load_config() -> dict:
     if neon_database_url and neon_database_url != 'postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/dbname?sslmode=require':
         config['neon_database_url'] = neon_database_url
     else:
-        # Use SQLite for development/testing
-        config['neon_database_url'] = 'sqlite:///./rag_agent.db'
-        logger.warning("NEON_DATABASE_URL not set or is default, using SQLite for development")
+        raise ConfigurationError("NEON_DATABASE_URL environment variable is required and must be set to a valid Neon Postgres URL")
 
     # Agent configuration (with defaults)
     config['model_name'] = os.getenv('MODEL_NAME', 'gpt-4-turbo')

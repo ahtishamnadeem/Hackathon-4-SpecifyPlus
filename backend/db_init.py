@@ -73,15 +73,10 @@ def test_database_connection():
         engine = create_engine(db_url, pool_pre_ping=True)
 
         with engine.connect() as connection:
-            # For SQLite, there's no version() function, so we'll use a simple query
-            if db_url.startswith('sqlite'):
-                result = connection.execute(text("SELECT sqlite_version()"))
-                version = result.fetchone()[0]
-                logger.info(f"SQLite connection successful. Version: {version}")
-            else:
-                result = connection.execute(text("SELECT version()"))
-                version = result.fetchone()[0]
-                logger.info(f"PostgreSQL connection successful. Version: {version}")
+            # Test PostgreSQL connection
+            result = connection.execute(text("SELECT version()"))
+            version = result.fetchone()[0]
+            logger.info(f"PostgreSQL connection successful. Version: {version}")
 
         return True
 
@@ -99,13 +94,12 @@ def main():
     """
     print("=== RAG Chatbot Database Initialization ===\n")
 
-    # Get database URL from the models (with fallback to SQLite)
+    # Get database URL from the models
     try:
         db_url = get_database_url()
-    except ValueError:
-        # If the default URL is used, set a fallback SQLite URL
-        db_url = 'sqlite:///./rag_agent.db'
-        print("Using SQLite for development (NEON_DATABASE_URL not configured)")
+    except ValueError as e:
+        print(f"Database configuration error: {e}")
+        return 1
 
     print(f"Database URL: {db_url[:50]}...")  # Show beginning of URL for verification
     print()
