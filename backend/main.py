@@ -52,12 +52,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize the database when the application starts"""
+    try:
+        logger.info("Initializing database...")
+        initialize_database()
+
+        # Verify the database tables exist after initialization
+        from db_models import get_db_engine
+        from sqlalchemy import inspect
+        engine = get_db_engine()
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+
+        required_tables = ['chat_sessions', 'chat_messages', 'conversation_memory']
+        missing_tables = [table for table in required_tables if table not in tables]
+
+        if missing_tables:
+            logger.error(f"Missing required tables after initialization: {missing_tables}")
+            raise Exception(f"Database initialization failed: Missing tables {missing_tables}")
+        else:
+            logger.info(f"Database initialized successfully with all required tables: {tables}")
+
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {str(e)}")
+        # For production deployment, we want to fail fast if database is misconfigured
+        raise
+
 # -------------------------
 # Import RAG modules
 # -------------------------
 from config import load_config
 from agent import process_query, initialize_openai_client
 from retrieval import validate_qdrant_connection
+from db_models import initialize_database
 
 # -------------------------
 # Pydantic models

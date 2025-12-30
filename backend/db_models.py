@@ -76,8 +76,7 @@ def get_database_url():
     """
     db_url = os.getenv('NEON_DATABASE_URL')
     if not db_url or db_url == 'postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/dbname?sslmode=require':
-        # Use SQLite for development/testing
-        return 'sqlite:///./rag_agent.db'
+        raise ValueError("NEON_DATABASE_URL environment variable is required and must be set to a valid Neon Postgres URL")
     return db_url
 
 
@@ -86,7 +85,20 @@ def get_db_engine():
     Create and return a database engine
     """
     db_url = get_database_url()
-    engine = create_engine(db_url, pool_pre_ping=True)
+
+    # Validate that we're using PostgreSQL, not SQLite
+    if 'postgresql' not in db_url.lower():
+        raise ValueError(f"Expected PostgreSQL URL but got: {db_url}")
+
+    # Configure PostgreSQL-specific parameters for Neon
+    engine = create_engine(
+        db_url,
+        pool_pre_ping=True,
+        pool_recycle=300,  # Recycle connections every 5 minutes
+        pool_size=20,     # Connection pool size
+        max_overflow=30,  # Max overflow connections
+        echo=False        # Set to True for SQL debugging
+    )
     return engine
 
 
@@ -104,5 +116,8 @@ def get_db_session():
     Get a database session
     """
     engine = get_db_engine()
+    # Verify we're connecting to PostgreSQL
+    if 'postgresql' not in str(engine.url).lower():
+        raise ValueError(f"Database session configured for non-PostgreSQL database: {engine.url}")
     Session = sessionmaker(bind=engine)
     return Session()

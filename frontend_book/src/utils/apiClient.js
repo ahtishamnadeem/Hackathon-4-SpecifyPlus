@@ -36,7 +36,7 @@ class ApiClient {
     if (typeof process !== 'undefined' && process.env.REACT_APP_BACKEND_URL) {
       return process.env.REACT_APP_BACKEND_URL;
     }
-    return 'https://ahtisham2006-rag-chatbot-backend.hf.space';
+    return 'https://ahtisham2006-rag-chatbot-backend.hf.space/';
   }
 
   // Send chat query
